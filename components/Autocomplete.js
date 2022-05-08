@@ -21,10 +21,7 @@ const Autocomplete = ({ onSelectPlace, setCafes }) => {
 
     const fetchExtraData = async (place) => {
         const proxyurl = "https://young-basin-20621.herokuapp.com/";
-        const url =
-            "https://maps.googleapis.com/maps/api/place/details/json?placeid=" +
-            place.place_id +
-            `${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`; // site that doesn’t send Access-Control-*
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place.place_id}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`; // site that doesn’t send Access-Control-*
         const response = await fetch(proxyurl + url);
         const data = await response.json();
         setPlace(data);
