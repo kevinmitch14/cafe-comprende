@@ -132,7 +132,7 @@ export default function Home() {
             />
             <NavigationControl position="top-left" />
             {pins}
-            {popupInfo && (
+            {/* {popupInfo && (
               <Popup
                 longitude={popupInfo.geometry.location.lng}
                 latitude={popupInfo.geometry.location.lat}
@@ -152,7 +152,7 @@ export default function Home() {
                   <p>{popupInfo.name}</p>
                 </div>
               </Popup>
-            )}
+            )} */}
           </Map>
         </>
       </main>
