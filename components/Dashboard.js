@@ -6,11 +6,12 @@ const Dashboard = ({ onSelectPlace, triggerGeoLocation }) => {
 
     return (
         <div className="flex flex-col items-center justify-between gap-y-2 border-b bg-gray-50 py-4 text-center">
-            <img
-                src="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
-                alt="logo"
-                className="w-24"
-            />
+            <a href="/">
+                <img
+                    src="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
+                    alt="logo"
+                    className="w-24"
+                /></a>
             <h1 className="text-3xl font-bold text-gray-700">Cafe Comprende</h1>
             <p className="text-xl font-light text-gray-500">Pick a cafe, rate it!</p>
             <div className="flex gap-x-4">

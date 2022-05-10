@@ -3,16 +3,15 @@ import React, { useState, useEffect } from "react";
 import PlaceListItem from "./PlaceListItem";
 import db from "../firebase";
 
-const PlaceList = ({ onSelectPlace, nearbyCafes }) => {
+const PlaceList = ({ onSelectPlace, nearbyCafes, activeDiv }) => {
     const [cafes, setCafes] = useState([]);
+    console.log(activeDiv)
 
     useEffect(() => {
         return onSnapshot(query(collection(db, "cafes")), (snapshot) => {
             setCafes(snapshot.docs.map((doc) => doc.data()));
         });
     }, []);
-    console.log(cafes)
-    console.log(nearbyCafes)
 
     return (
         <div>
@@ -21,6 +20,7 @@ const PlaceList = ({ onSelectPlace, nearbyCafes }) => {
                     <PlaceListItem
                         key={data.place_id}
                         data={data}
+                        activeDiv={activeDiv}
                         rating={rating}
                         reviews={reviews}
                         distance={distance}
@@ -32,6 +32,7 @@ const PlaceList = ({ onSelectPlace, nearbyCafes }) => {
                         <PlaceListItem
                             key={data.place_id}
                             data={data}
+                            activeDiv={activeDiv}
                             rating={rating}
                             reviews={reviews}
                             onSelectPlace={onSelectPlace}

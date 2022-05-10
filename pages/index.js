@@ -28,6 +28,7 @@ export default function Home() {
   const [nearbyCafes, setNearbyCafes] = useState(null);
   const mapRef = useRef();
   const geoRef = useRef();
+  const [activeDiv, setActiveDiv] = useState(null);
 
   const distanceKM = useCallback((lat1, lon1, lat2, lon2) => {
     var R = 6371; // Radius of the earth in km
@@ -79,6 +80,7 @@ export default function Home() {
       onClick={(e) => {
         e.originalEvent.stopPropagation();
         setPopupInfo(data);
+        setActiveDiv(data.place_id);
       }}
     ></Marker>
   ));
@@ -112,7 +114,7 @@ export default function Home() {
             onSelectPlace={onSelectPlace}
             triggerGeoLocation={triggerGeoLocation}
           />
-          <PlaceList onSelectPlace={onSelectPlace} nearbyCafes={nearbyCafes} />
+          <PlaceList onSelectPlace={onSelectPlace} nearbyCafes={nearbyCafes} activeDiv={activeDiv} />
         </div>
         <>
           <Map
@@ -133,9 +135,10 @@ export default function Home() {
             {popupInfo && (
               <Popup
                 longitude={popupInfo.geometry.location.lng}
-                focusAfterOpen={false}
-                className="p-0"
                 latitude={popupInfo.geometry.location.lat}
+                focusAfterOpen={false}
+                keyProp={popupInfo.place_id}
+                maxWidth="none"
                 anchor="top"
                 onClose={() => setPopupInfo(null)}
               >

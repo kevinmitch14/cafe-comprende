@@ -1,17 +1,20 @@
+import { doc, getDoc, increment, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
+import db from "../firebase";
 
-const ExpandedDetails = ({ data, setExpanded }) => {
+const ExpandedDetails = ({ place, setExpanded }) => {
+
     const updaterHandler = () => {
-        updateDoc(doc(db, "cafes", place.result.place_id), {
+        updateDoc(doc(db, "cafes", place.place_id), {
             reviews: increment(1),
             rating: increment(Number(rating)),
         });
     };
 
     const createDoc = () => {
-        setDoc(doc(db, "cafes", place.result.place_id), {
-            data: place.result,
-            location: place.result.geometry.location,
+        setDoc(doc(db, "cafes", place.place_id), {
+            data: place,
+            location: place.geometry.location,
             time: serverTimestamp(),
             rating: Number(rating),
             reviews: 1,
@@ -19,16 +22,13 @@ const ExpandedDetails = ({ data, setExpanded }) => {
     };
 
     const handleSubmit = async () => {
-        const docRef = doc(db, "cafes", place.result.place_id);
+        const docRef = doc(db, "cafes", place.place_id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             updaterHandler();
         } else {
             createDoc();
         }
-        setPlace(null);
-        setValue("");
-        setReview(false);
     };
 
     const [rating, setRating] = useState(null);
@@ -91,12 +91,12 @@ const ExpandedDetails = ({ data, setExpanded }) => {
                 </div>
             </div>
             <p>
-                <a href={data.url} target="_blank" rel="noreferrer">
+                <a href={place.url} target="_blank" rel="noreferrer">
                     Directions
                 </a>
             </p>
             <p>
-                <a href={data.website}>{data.website}</a>
+                <a href={place.website}>{place.website}</a>
             </p>
         </div>
     );

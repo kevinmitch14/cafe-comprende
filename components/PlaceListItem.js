@@ -1,18 +1,37 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ExpandedDetails from "./ExpandedDetails";
 
-const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
+const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPlace }) => {
     let imageRef = data.photos ? data.photos[0] : null;
     const [expanded, setExpanded] = useState(false);
+    const [active, setActive] = useState(activeDiv === data.place_id);
+
+    const divRef = useRef()
+    const expandRef = useRef()
+
+    // const scrollToElement = () => expandRef.current.scrollIntoView({ block: "end" });
+
+    useEffect(() => {
+        if (expandRef.current)
+            expandRef.current.scrollIntoView({ block: "end" });
+    }, [expanded])
+
+
+    useEffect(() => {
+        if (activeDiv === data.place_id) {
+            divRef.current.click()
+        }
+    }, [activeDiv, data.place_id])
 
     return (
         <>
             <div
-                className={`m-4 flex flex-col relative rounded-md border ${expanded && `hover:cursor-default`} border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50`}
+                ref={divRef}
+                className={`${data.place_id} m-4 flex flex-col relative rounded-md border ${expanded && `hover:cursor-default`} border-gray-200 pr-2 ${activeDiv === data.place_id && `bg-gray-100 border-2 border-black`} hover:cursor-pointer hover:bg-gray-50`}
                 onClick={() => {
                     !expanded && onSelectPlace(data.geometry.location.lng, data.geometry.location.lat);
-                    !expanded && setExpanded(true)
+                    !expanded && setExpanded(true);
                 }}
             >
                 <div className="flex" onClick={() => setExpanded(false)}>{imageRef && (
@@ -24,7 +43,7 @@ const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
                     // width={imageRef.width}
                     />
                 )}
-                    <div className="flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600">
+                    <div className={`flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600}`}>
                         <p>{data.name}</p>
                         <p>{rating / reviews} ★<span className="text-sm pl-3">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</span></p>
                         {distance && (
@@ -36,7 +55,7 @@ const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
                             </p>
                         )}
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`right-0 w-[20px] text-gray-400 ${expanded && `rotate-90`} duration-300`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`right-0 w-[20px] text-gray-400 ${expanded && `rotate-90`} hover:cursor-pointer duration-300`}>
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -46,7 +65,9 @@ const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
                     </svg>
                 </div>
                 {expanded && (
-                    <ExpandedDetails data={data} setExpanded={setExpanded} />
+                    <div ref={expandRef}>
+                        <ExpandedDetails place={data} setExpanded={setExpanded} />
+                    </div>
                 )}
             </div>
         </>
