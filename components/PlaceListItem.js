@@ -26,12 +26,12 @@ const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
                 )}
                     <div className="flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600">
                         <p>{data.name}</p>
-                        <p>{rating / reviews} ★</p><p className="text-sm">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</p>
+                        <p>{rating / reviews} ★<span className="text-sm pl-3">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</span></p>
                         {distance && (
                             <p className="text-xs">
                                 {Math.round(distance * 100) / 100}km
                                 {Math.round(distance * 100) / 100 > 10 && (
-                                    <span className="text-red-600">Far!</span>
+                                    <span className="text-red-600 pl-2">Far!</span>
                                 )}
                             </p>
                         )}
