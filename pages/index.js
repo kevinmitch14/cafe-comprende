@@ -51,11 +51,11 @@ export default function Home() {
   useEffect(() => {
     if (userLocation && data) {
       const { latitude, longitude } = userLocation;
-      const cafes = data.map(({ data }) => {
+      const cafes = data.map(({ data, reviews, rating }) => {
         const { geometry } = data;
         const { lat, lng } = geometry.location;
         const distance = distanceKM(latitude, longitude, lat, lng);
-        return { data, distance };
+        return { data, reviews, rating, distance };
       });
       setNearbyCafes(cafes.sort((a, b) => a.distance - b.distance));
     }

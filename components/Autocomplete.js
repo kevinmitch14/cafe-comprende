@@ -105,34 +105,42 @@ const Autocomplete = ({ onSelectPlace, setCafes, setReview }) => {
                 <div className="m-4 flex rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
                     {place.result.photos && (
                         <Image
-                            src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&maxheight=150&photo_reference=${place.result.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`}
+                            src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=${place.result.photos[0].width}&maxheight=${place.result.photos[0].height}&photo_reference=${place.result.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`}
                             alt={"image"}
                             height={100}
-                            width={100}
+                            width={150}
                         />
                     )}
-                    <div className="p-4">
-                        <p>{place.result.name}</p>
+                    <div className="p-4 flex flex-col gap-y-2">
+                        <p className="text-left">{place.result.name}</p>
                         <div className="flex">
-                            <select name="rating" id="rating" className="rounded border bg-white h-8" onChange={(e) => setRating(e.target.value)}>
-                                <option disabled defaultValue={'Rating'}>Rating</option>
+                            {/* <select name="rating" defaultValue="rating" id="rating" className="rounded border bg-white h-8" onChange={(e) => setRating(e.target.value)}>
+                                <option disabled value="rating">Rating</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
-                                <option value="4">4</option>
+                            <option value="4">4</option>
                                 <option value="5">5</option>
-                            </select>
+                            </select> */}
+                            <div className="flex gap-x-1">
+                                <button className={`p-1 px-2 border + ${rating === '1' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={1}>1</button>
+                                <button className={`p-1 px-2 border + ${rating === '2' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={2}>2</button>
+                                <button className={`p-1 px-2 border + ${rating === '3' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={3}>3</button>
+                                <button className={`p-1 px-2 border + ${rating === '4' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={4}>4</button>
+                                <button className={`p-1 px-2 border + ${rating === '5' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={5}>5</button>
+                            </div>
                             <button
-                                className="rounded border bg-white p-1 px-2 text-base h-8"
+                                className={`ml-2 rounded border bg-white p-1 px-2 text-base + ${rating ? `` : `bg-gray-200 grayscale`}`}
                                 onClick={handleSubmit}
                             >
-                                Submit
+                                ➡️
                             </button>
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

@@ -12,6 +12,7 @@ const PlaceList = ({ onSelectPlace, nearbyCafes }) => {
         });
     }, []);
     console.log(cafes)
+    console.log(nearbyCafes)
 
     return (
         <div>
