@@ -1,9 +1,8 @@
 import Image from "next/image";
 import React from "react";
 
-const PlaceListItem = ({ data, distance, onSelectPlace }) => {
+const PlaceListItem = ({ data, rating, reviews, distance, onSelectPlace }) => {
     let imageRef = data.photos ? data.photos[0] : null;
-    console.log(imageRef);
     return (
         <div
             className="m-4 flex items-center rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50"
@@ -22,6 +21,7 @@ const PlaceListItem = ({ data, distance, onSelectPlace }) => {
             )}
             <div className="flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600">
                 <p>{data.name}</p>
+                <p>{rating / reviews} ⭐️ </p><p className="text-sm">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</p>
                 {distance && (
                     <p className="text-xs">
                         {Math.round(distance * 100) / 100}km

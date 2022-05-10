@@ -11,23 +11,28 @@ const PlaceList = ({ onSelectPlace, nearbyCafes }) => {
             setCafes(snapshot.docs.map((doc) => doc.data()));
         });
     }, []);
+    console.log(cafes)
 
     return (
         <div>
             {nearbyCafes
-                ? nearbyCafes.map(({ data, distance }) => (
+                ? nearbyCafes.map(({ data, distance, rating, reviews }) => (
                     <PlaceListItem
                         key={data.place_id}
                         data={data}
+                        rating={rating}
+                        reviews={reviews}
                         distance={distance}
                         onSelectPlace={onSelectPlace}
                     />
                 ))
-                : cafes.map(({ data }) => {
+                : cafes.map(({ data, rating, reviews }) => {
                     return (
                         <PlaceListItem
                             key={data.place_id}
                             data={data}
+                            rating={rating}
+                            reviews={reviews}
                             onSelectPlace={onSelectPlace}
                         />
                     );

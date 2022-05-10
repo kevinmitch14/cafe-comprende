@@ -29,7 +29,7 @@ const Dashboard = ({ onSelectPlace, triggerGeoLocation }) => {
                     </button>
                 )}
             </div>
-            {review && <Autocomplete onSelectPlace={onSelectPlace} />}
+            {review && <Autocomplete onSelectPlace={onSelectPlace} setReview={setReview} />}
         </div>
     );
 };
