@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import db from "../firebase";
 
 const ExpandedDetails = ({ place, setExpanded }) => {
+    const [reviewed, setReviewed] = useState(false);
 
     const updaterHandler = () => {
         updateDoc(doc(db, "cafes", place.place_id), {
@@ -29,6 +30,7 @@ const ExpandedDetails = ({ place, setExpanded }) => {
         } else {
             createDoc();
         }
+        setReviewed(true)
     };
 
     const [rating, setRating] = useState(null);
@@ -82,9 +84,10 @@ const ExpandedDetails = ({ place, setExpanded }) => {
                         </button>
                     </div>
                     <button
+                        disabled={reviewed}
                         className={`+ ml-2 rounded border bg-emerald-500 px-2 text-base text-white ${!rating && ` grayscale`
-                            }`}
-                        onClick={handleSubmit}
+                            } ${reviewed && `grayscale`}`}
+                        onClick={!reviewed ? handleSubmit : null}
                     >
                         →
                     </button>
