@@ -10,8 +10,6 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
     const divRef = useRef()
     const expandRef = useRef()
 
-    // const scrollToElement = () => expandRef.current.scrollIntoView({ block: "end" });
-
     useEffect(() => {
         if (expandRef.current)
             expandRef.current.scrollIntoView({ block: "end" });
@@ -23,6 +21,11 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
             divRef.current.click()
         }
     }, [activeDiv, data.place_id])
+
+    // round number to one decimal place
+    const round = (num) => {
+        return Math.round(num * 10) / 10;
+    }
 
     return (
         <>
@@ -43,9 +46,10 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
                     // width={imageRef.width}
                     />
                 )}
+
                     <div className={`flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600}`}>
                         <p>{data.name}</p>
-                        <p>{rating / reviews} ★<span className="text-sm pl-3">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</span></p>
+                        <p>{Math.round((rating / reviews) * 10) / 10} ★<span className="text-sm pl-3">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</span></p>
                         {distance && (
                             <p className="text-xs">
                                 {Math.round(distance * 100) / 100}km
