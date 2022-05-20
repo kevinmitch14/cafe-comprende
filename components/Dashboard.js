@@ -2,9 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 import Autocomplete from "./Autocomplete";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { Box, Button, Modal, Popover, Typography } from "@mui/material";
 
 const Dashboard = ({ onSelectPlace, triggerGeoLocation }) => {
     const [review, setReview] = useState(false);
+    const { data: session } = useSession()
 
     return (
         <div className="flex flex-col items-center justify-between gap-y-2 border-b bg-gray-50 py-4 text-center">
@@ -16,6 +19,8 @@ const Dashboard = ({ onSelectPlace, triggerGeoLocation }) => {
                     width={120}
                 />
             </Link>
+            <button className="bg-emerald-100 p-2" onClick={() => signIn('github')}>Login</button>
+            <button className="bg-emerald-100 p-2" onClick={() => signOut()}>Logout</button>
             <h1 className="text-3xl font-bold text-gray-700">Cafe Comprende</h1>
             <p className="text-xl font-light text-gray-500">Pick a cafe, rate it!</p>
             <div className="flex gap-x-4">

@@ -12,6 +12,7 @@ import db from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import Dashboard from "../components/Dashboard";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const initialViewState = {
   latitude: 52.7751,
@@ -22,6 +23,8 @@ const initialViewState = {
 };
 
 export default function Home() {
+  const { data: session } = useSession()
+  console.log(session)
   const [data, setData] = useState([]);
   const [popupInfo, setPopupInfo] = useState(null);
   const [userLocation, setUserLocation] = useState(null);

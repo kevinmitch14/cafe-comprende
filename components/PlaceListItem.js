@@ -5,7 +5,6 @@ import ExpandedDetails from "./ExpandedDetails";
 const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPlace }) => {
     let imageRef = data.photos ? data.photos[0] : null;
     const [expanded, setExpanded] = useState(false);
-    const [active, setActive] = useState(activeDiv === data.place_id);
 
     const divRef = useRef()
     const expandRef = useRef()
