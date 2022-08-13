@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
-import { doc, setDoc, addDoc, serverTimestamp, updateDoc, increment, getDoc } from "firebase/firestore";
+import { doc, setDoc, addDoc, serverTimestamp, updateDoc, increment, getDoc, arrayUnion, FieldValue, Timestamp } from "firebase/firestore";
 import db from "../firebase";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 
 const Autocomplete = ({ onSelectPlace, setCafes, setReview }) => {
     const [place, setPlace] = useState(null);
     const [rating, setRating] = useState(null)
+    const { data: session } = useSession()
     console.log(rating)
     const [image, setImage] = useState(null);
 
 
-    const updaterHandler = () => {
+    const cafeUpdateDoc = () => {
         updateDoc(doc(db, 'cafes', place.result.place_id), {
             reviews: increment(1),
-            rating: increment(Number(rating))
+            rating: increment(Number(rating)),
+            time: serverTimestamp(),
         })
     }
 
-    const createDoc = () => {
+    const cafeCreateDoc = () => {
         setDoc(doc(db, "cafes", place.result.place_id), {
             data: place.result,
             location: place.result.geometry.location,
@@ -29,13 +32,37 @@ const Autocomplete = ({ onSelectPlace, setCafes, setReview }) => {
         })
     }
 
+    const accountCreateDoc = () => {
+        setDoc(doc(db, "accounts", session.user.email), {
+            data: session.user,
+            reviews: arrayUnion({ place: place.result.place_id, rating: Number(rating), time: Timestamp.now() })
+        });
+    }
+
+    const accountUpdateDoc = () => {
+        updateDoc(doc(db, "accounts", session.user.email), {
+            reviews: arrayUnion({ place: place.result.place_id, rating: Number(rating), time: Timestamp.now() }),
+        });
+    }
+
+
+    const accountHandler = async () => {
+        const docRef = doc(db, "accounts", session.user.email);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            accountUpdateDoc()
+        } else {
+            accountCreateDoc()
+        }
+    }
     const handleSubmit = async () => {
         const docRef = doc(db, 'cafes', place.result.place_id);
         const docSnap = await getDoc(docRef);
+        accountHandler()
         if (docSnap.exists()) {
-            updaterHandler()
+            cafeUpdateDoc()
         } else {
-            createDoc()
+            cafeCreateDoc()
         }
         setPlace(null);
         setValue("");
