@@ -18,6 +18,10 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
     useEffect(() => {
         if (activeDiv === data.place_id) {
             divRef.current.click()
+            setExpanded(true)
+        } else {
+            console.log("Close")
+            setExpanded(false)
         }
     }, [activeDiv, data.place_id])
 
@@ -25,12 +29,11 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
     const round = (num) => {
         return Math.round(num * 10) / 10;
     }
-
     return (
         <>
             <div
                 ref={divRef}
-                className={`${data.place_id} m-4 flex flex-col relative rounded-md border ${expanded && `hover:cursor-default`} border-gray-200 pr-2 ${activeDiv === data.place_id && `bg-gray-100 border-2 border-black`} hover:cursor-pointer hover:bg-gray-50`}
+                className={`${data.place_id} m-4 flex flex-col relative rounded-md border ${expanded && `hover:cursor-default`} border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50`}
                 onClick={() => {
                     !expanded && onSelectPlace(data.geometry.location.lng, data.geometry.location.lat);
                     !expanded && setExpanded(true);
@@ -69,7 +72,7 @@ const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPla
                 </div>
                 {expanded && (
                     <div ref={expandRef}>
-                        <ExpandedDetails place={data} setExpanded={setExpanded} />
+                        <ExpandedDetails place={data} setExpanded={setExpanded} activeDiv={activeDiv} />
                     </div>
                 )}
             </div>

@@ -117,7 +117,7 @@ export default function Home() {
             onSelectPlace={onSelectPlace}
             triggerGeoLocation={triggerGeoLocation}
           />
-          <PlaceList onSelectPlace={onSelectPlace} nearbyCafes={nearbyCafes} activeDiv={activeDiv} />
+          <PlaceList onSelectPlace={onSelectPlace} nearbyCafes={nearbyCafes} activeDiv={activeDiv} triggerGeoLocation={triggerGeoLocation} />
         </div>
         <>
           <Map
