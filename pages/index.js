@@ -1,52 +1,20 @@
 import Head from "next/head";
 import MapComponent from "../components/MapComponent";
-import PlaceList from "../components/PlaceList";
 import { useRef, useCallback, useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
-import Script from "next/script";
 
 
 
 export default function Home() {
   const { data: session } = useSession()
 
-  const geoRef = useRef();
-
-
-
   const { isLoading, error, data } = useQuery(['repoData'], () =>
     fetch('/api/users').then(res =>
       res.json()))
   console.log(isLoading, error, data)
 
-
-  const triggerGeoLocation = useCallback(() => {
-    geoRef.current.trigger();
-  }, []);
-
-  // function initService() {
-  //   const displaySuggestions = function (predictions, status) {
-  //     if (status != google.maps.places.PlacesServiceStatus.OK || !predictions) {
-  //       alert(status);
-  //       return;
-  //     }
-
-  //     predictions.forEach((prediction) => {
-  //       console.log(prediction)
-  //       const li = document.createElement("li");
-
-  //       li.appendChild(document.createTextNode(prediction.description));
-  //       document.getElementById("results").appendChild(li);
-  //     });
-  //   };
-
-  //   const service = new google.maps.places.AutocompleteService();
-
-  //   service.getQueryPredictions({ input: "grind cafe" }, displaySuggestions);
-  // }
-  // if (typeof window !== 'undefined') { window.initService = initService; }
 
   return (
     <div>
@@ -57,13 +25,6 @@ export default function Home() {
           rel="icon"
           href="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
         />
-        {/* <script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places&v=weekly`}
-          defer
-
-        // async
-        ></script> */}
-
       </Head>
       <main className="flex">
         <MapComponent />
