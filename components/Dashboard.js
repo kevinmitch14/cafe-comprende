@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Autocomplete from "./Autocomplete";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { BeakerIcon } from '@heroicons/react/solid'
 import { UserIcon } from '@heroicons/react/outline'
