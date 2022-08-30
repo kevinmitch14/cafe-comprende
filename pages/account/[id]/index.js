@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from 'react'
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import db from '../../../firebase'
-import AccountListItem from '../../../components/AccountListItem'
 import Map, { GeolocateControl, Marker, NavigationControl } from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
 import Account from '../../../components/Account';
@@ -94,7 +92,7 @@ const index = () => {
                         {tab === 'reviews' ? account.reviews.map((review, index) => {
                             return (
                                 <div key={index} className='bg-gray-100 my-2 py-4 px-2'>
-                                    <AccountListItem place={review.place} />
+                                    {/* <AccountListItem place={review.place} /> */}
                                     <p>Date: {convertTimestamp(review.time)}</p>
                                     <p>Rating: {review.rating}</p>
                                 </div>
@@ -103,7 +101,7 @@ const index = () => {
                         }) : account.saved.map((place, index) => {
                             return (
                                 <div key={index} className='bg-gray-100 my-2 py-4 px-2'>
-                                    <AccountListItem place={place} />
+                                    {/* <AccountListItem place={place} /> */}
                                 </div>
                             )
 
