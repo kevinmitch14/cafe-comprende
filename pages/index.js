@@ -2,16 +2,12 @@ import Head from "next/head";
 import MapComponent from "../components/MapComponent";
 import { useRef, useCallback, useState } from "react";
 import Dashboard from "../components/Dashboard";
-import { useSession } from "next-auth/react";
 import { useMutation, useQuery } from "react-query";
 import PlaceList from "../components/PlaceList";
 
 
 
 export default function Home() {
-  const { data: session } = useSession()
-
-
   return (
     <div>
       <Head>
