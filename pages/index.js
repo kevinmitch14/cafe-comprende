@@ -3,17 +3,13 @@ import MapComponent from "../components/MapComponent";
 import { useRef, useCallback, useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { useSession } from "next-auth/react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import PlaceList from "../components/PlaceList";
 
 
 
 export default function Home() {
   const { data: session } = useSession()
-
-  const { isLoading, error, data } = useQuery(['repoData'], () =>
-    fetch('/api/users').then(res =>
-      res.json()))
-  console.log(isLoading, error, data)
 
 
   return (
@@ -30,6 +26,7 @@ export default function Home() {
         <MapComponent />
         <div className="h-[100vh] w-[30vw] overflow-scroll">
           <Dashboard />
+          <PlaceList />
         </div>
       </main>
     </div>

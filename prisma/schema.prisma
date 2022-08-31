@@ -43,3 +43,27 @@ model User {
   posts   Post[]
   profile Profile?
 }
+
+model Cafe {
+  id        Int      @id @default(autoincrement())
+  reviews   Review[]
+  latitude  Decimal
+  longitude Decimal
+  name      String
+  rating    Int
+}
+
+model Review {
+  Cafe      Cafe?    @relation(fields: [cafeId], references: [id])
+  cafeId    Int?
+  rating    Int
+  id        Int      @id @default(autoincrement())
+  Account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+}
+
+model Account {
+  id       Int      @id @default(autoincrement())
+  username String
+  reviews  Review[]
+}

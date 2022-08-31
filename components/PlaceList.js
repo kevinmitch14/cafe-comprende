@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
 const PlaceList = () => {
-    const { isLoading, error, data } = useQuery(['repoData'], () =>
-        fetch('/api/users').then(res =>
+    const { isLoading, error, data } = useQuery(['cafes'], () =>
+        fetch('/api/cafes').then(res =>
             res.json()
         )
     )
@@ -12,11 +12,12 @@ const PlaceList = () => {
     if (error) return 'An error has occurred: ' + error.message
 
     return (
-        <div>
+        <div className="divide-y">
             {data.map((cafe, index) => (
                 <div key={index}>
-                    <p>{cafe.id}</p>
-                    <p>{cafe.title}</p>
+                    <p>Name: {cafe.name}</p>
+                    <p>Rating: {cafe.rating}/5</p>
+                    <p>Location: {cafe.latitude}-{cafe.longitude}</p>
                 </div>
             ))}
         </div>
