@@ -3,18 +3,16 @@ import Script from 'next/script';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { OfficeBuildingIcon } from '@heroicons/react/solid'
-import { useMutation, useQueryClient } from 'react-query';
-import axios from "axios";
 
 
 const FeaturedCafe = () => {
     const [rating, setRating] = useState(null)
-    const [inputValue, setInputValue] = useState("")
     const [featuredCafe, setFeaturedCafe] = useState(null)
     const [dialogOpen, setDialogOpen] = useState(false)
     const cancelButtonRef = useRef(null)
 
 
+    console.log(featuredCafe)
     function initService() {
         const options = { types: ["cafe"] }
         const input = document.getElementById("pac-input");
@@ -24,46 +22,6 @@ const FeaturedCafe = () => {
         });
     }
 
-    const queryClient = useQueryClient()
-    const originalMutation = (newCafe) => {
-        return axios.post('/api/createReview', newCafe)
-    }
-
-    // const { isLoading, error, data } = useQuery(['cafes'], testingFetcher)
-    // console.log(isLoading, error, data)
-
-    const mutation = useMutation(originalMutation, {
-        // When mutate is called:
-        onMutate: async newCafe => {
-            // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-            await queryClient.cancelQueries('cafes')
-            setFeaturedCafe(null)
-
-            // Snapshot the previous value
-            const previousTodos = queryClient.getQueryData('cafes')
-            console.log(previousTodos)
-            // Optimistically update to the new value
-            queryClient.setQueryData('cafes', old => [...old, newCafe])
-
-            // Return a context object with the snapshotted value
-            return { previousTodos }
-        },
-        // If the mutation fails, use the context returned from onMutate to roll back
-        onError: (err, newCafe, context) => {
-            queryClient.setQueryData('cafes', context.previousTodos)
-        },
-        // Always refetch after error or success:
-        onSettled: () => {
-            queryClient.invalidateQueries('cafes')
-        },
-    })
-
-    const newCafe = {
-        name: featuredCafe?.name,
-        rating: rating,
-        latitude: featuredCafe?.geometry.location.lat().toFixed(2),
-        longitude: featuredCafe?.geometry.location.lng().toFixed(2),
-    }
 
     if (typeof window !== 'undefined') {
         window.initService = initService;
@@ -74,13 +32,11 @@ const FeaturedCafe = () => {
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
             <input
                 id="pac-input"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="w-[80%] rounded-md border border-gray-300 p-1"
+                className="w-[70%] rounded-md border border-gray-300 p-1"
                 type="text" placeholder="Enter a location"
             />
             {featuredCafe && (
-                <div className="m-4 flex w-[80%] rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
+                <div className="m-4 flex rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
                     {featuredCafe.photos && (
                         <Image
                             src={featuredCafe.photos[0].getUrl({ maxWidth: featuredCafe.photos[0].width, maxHeight: featuredCafe.photos[0].height })}
@@ -136,11 +92,11 @@ const FeaturedCafe = () => {
                                                         Blah Blah Blah, rate this cafe.
                                                     </p>
                                                     <div className="flex justify-centers gap-x-1 text-sm">
-                                                        <button className='p-1 hover:bg-gray-100 rounded-lg px-4 border transition-[focus] duration-500 focus:bg-emerald-600 bold focus:text-white' onClick={(e) => setRating(1)} value={1}>1</button>
-                                                        <button className='p-1 hover:bg-gray-100 rounded-lg px-4 border transition-[focus] duration-500 focus:bg-emerald-600 bold focus:text-white' onClick={(e) => setRating(2)} value={2}>2</button>
-                                                        <button className='p-1 hover:bg-gray-100 rounded-lg px-4 border transition-[focus] duration-500 focus:bg-emerald-600 bold focus:text-white' onClick={(e) => setRating(3)} value={3}>3</button>
-                                                        <button className='p-1 hover:bg-gray-100 rounded-lg px-4 border transition-[focus] duration-500 focus:bg-emerald-600 bold focus:text-white' onClick={(e) => setRating(4)} value={4}>4</button>
-                                                        <button className='p-1 hover:bg-gray-100 rounded-lg px-4 border transition-[focus] duration-500 focus:bg-emerald-600 bold focus:text-white' onClick={(e) => setRating(5)} value={5}>5</button>
+                                                        <button className={`p-1 hover:bg-gray-50 rounded-lg px-4 border + ${rating === '1' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={1}>1</button>
+                                                        <button className={`p-1 hover:bg-gray-50 rounded-lg px-4 border + ${rating === '2' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={2}>2</button>
+                                                        <button className={`p-1 hover:bg-gray-50 rounded-lg px-4 border + ${rating === '3' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={3}>3</button>
+                                                        <button className={`p-1 hover:bg-gray-50 rounded-lg px-4 border + ${rating === '4' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={4}>4</button>
+                                                        <button className={`p-1 hover:bg-gray-50 rounded-lg px-4 border + ${rating === '5' && `bg-emerald-100`}`} onClick={(e) => setRating(e.target.value)} value={5}>5</button>
                                                     </div>
                                                     <label htmlFor="comments" className='text-sm text-gray-500'>Additional comments</label>
                                                     <textarea id="comments" name='comments' className='text-sm w-full bg-gray-100'></textarea>
@@ -152,11 +108,7 @@ const FeaturedCafe = () => {
                                         <button
                                             type="button"
                                             className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                                            onClick={() => {
-                                                mutation.mutate(newCafe)
-                                                setDialogOpen(false)
-                                                setInputValue("")
-                                            }}
+                                            onClick={() => setDialogOpen(false)}
                                         >
                                             Submit
                                         </button>

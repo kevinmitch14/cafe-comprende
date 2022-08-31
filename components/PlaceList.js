@@ -1,15 +1,6 @@
 import { useQuery } from "react-query";
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { OfficeBuildingIcon } from '@heroicons/react/solid'
-import Modal from "./Modal";
-import PlaceListItem from "./PlaceListItem";
-
 
 const PlaceList = () => {
-    const [rating, setRating] = useState(null)
-    const cancelButtonRef = useRef(null)
-
     const { isLoading, error, data } = useQuery(['cafes'], () =>
         fetch('/api/cafes').then(res =>
             res.json()
@@ -22,11 +13,13 @@ const PlaceList = () => {
 
     return (
         <div className="divide-y">
-            {data.map((cafe, index) => {
-                return (
-                    <PlaceListItem key={index} cafe={cafe} />
-                )
-            })}
+            {data.map((cafe, index) => (
+                <div key={index}>
+                    <p>Name: {cafe.name}</p>
+                    <p>Rating: {cafe.rating}/5</p>
+                    <p>Location: {cafe.latitude}-{cafe.longitude}</p>
+                </div>
+            ))}
         </div>
     )
 
