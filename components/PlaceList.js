@@ -9,7 +9,6 @@ import PlaceListItem from "./PlaceListItem";
 const PlaceList = () => {
     const [rating, setRating] = useState(null)
     const cancelButtonRef = useRef(null)
-
     const { isLoading, error, data } = useQuery(['cafes'], () =>
         fetch('/api/cafes').then(res =>
             res.json()
