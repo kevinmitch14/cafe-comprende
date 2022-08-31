@@ -1,83 +1,32 @@
-import Image from "next/image";
-import React, { useState, useRef, useEffect } from "react";
-import ExpandedDetails from "./ExpandedDetails";
+import React, { useState } from 'react'
+import Modal from './Modal'
 
-const PlaceListItem = ({ data, rating, reviews, distance, activeDiv, onSelectPlace }) => {
-    let imageRef = data.photos ? data.photos[0] : null;
-    const [expanded, setExpanded] = useState(false);
+const PlaceListItem = ({ cafe }) => {
+    const [dialogOpen, setDialogOpen] = useState(false)
 
-    const divRef = useRef()
-    const expandRef = useRef()
-
-    useEffect(() => {
-        if (expandRef.current)
-            expandRef.current.scrollIntoView({ block: "end" });
-    }, [expanded])
-
-
-    useEffect(() => {
-        if (activeDiv === data.place_id) {
-            divRef.current.click()
-            setExpanded(true)
-        } else {
-            console.log("Close")
-            setExpanded(false)
-        }
-    }, [activeDiv, data.place_id])
-
-    // round number to one decimal place
-    const round = (num) => {
-        return Math.round(num * 10) / 10;
-    }
     return (
-        <>
-            <div
-                ref={divRef}
-                className={`${data.place_id} m-4 flex flex-col relative rounded-md border ${expanded && `hover:cursor-default`} border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50`}
-                onClick={() => {
-                    !expanded && onSelectPlace(data.geometry.location.lng, data.geometry.location.lat);
-                    !expanded && setExpanded(true);
-                }}
-            >
-                <div className="flex" onClick={() => setExpanded(false)}>{imageRef && (
-                    <Image
-                        src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=${imageRef.width}&maxheight=${imageRef.height}&photo_reference=${imageRef.photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`}
-                        alt={"image"}
-                        height={100}
-                        width={150}
-                    // width={imageRef.width}
-                    />
-                )}
+        <div className='p-4'>
+            <h3 className='font-bold text-lg'>{cafe.name}</h3>
 
-                    <div className={`flex flex-1 flex-col gap-y-1 p-4 py-4 text-gray-600}`}>
-                        <p>{data.name}</p>
-                        <p>{Math.round((rating / reviews) * 10) / 10} ★<span className="text-sm pl-3">{reviews} {reviews === 1 ? <span>review</span> : <span>reviews</span>}</span></p>
-                        {distance && (
-                            <p className="text-xs">
-                                {Math.round(distance * 100) / 100}km
-                                {Math.round(distance * 100) / 100 > 10 && (
-                                    <span className="text-red-600 pl-2">Far!</span>
-                                )}
-                            </p>
-                        )}
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`right-0 w-[20px] text-gray-400 ${expanded && `rotate-90`} hover:cursor-pointer duration-300`}>
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 5l7 7-7 7"
-                        ></path>
-                    </svg>
+            <div className='flex justify-between items-center'>
+                <p>Rating: {cafe.rating}/5</p>
+                <div className='flex gap-x-2'>
+                    <button
+                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                    </button>
+                    <button
+                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                        onClick={() => setDialogOpen(true)}>Rate this cafe.
+                    </button>
                 </div>
-                {expanded && (
-                    <div ref={expandRef}>
-                        <ExpandedDetails place={data} setExpanded={setExpanded} activeDiv={activeDiv} />
-                    </div>
-                )}
             </div>
-        </>
-    );
-};
+            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={cafe} />}
+        </div>
+    )
+}
 
-export default PlaceListItem;
+export default PlaceListItem
