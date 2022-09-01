@@ -20,7 +20,7 @@ export default function Home() {
         />
       </Head>
       <main className="relative flex flex-col h-[100vh] md:flex-row">
-        <div className="md:w-2/6 md:h-full overflow-y-auto">
+        <div className="md:w-2/6 md:h-full md:overflow-y-auto">
           <Dashboard />
           {/* <PlaceList /> */}
         </div>
