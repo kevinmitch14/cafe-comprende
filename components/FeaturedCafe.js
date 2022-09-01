@@ -2,9 +2,10 @@ import Image from 'next/image';
 import Script from 'next/script';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { OfficeBuildingIcon } from '@heroicons/react/solid'
+import { OfficeBuildingIcon, SearchCircleIcon } from '@heroicons/react/solid'
 import { useMutation, useQueryClient } from 'react-query';
 import axios from "axios";
+import Modal from './Modal'
 
 
 const FeaturedCafe = () => {
@@ -72,13 +73,33 @@ const FeaturedCafe = () => {
     return (
         <>
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
-            <input
+
+            {/* <input
                 id="pac-input"
-                value={inputValue}
+                value={featuredCafe ? featuredCafe.name : inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="w-[80%] rounded-md border border-gray-300 p-1"
+                className="w-[80%] relative rounded-md border border-gray-300 p-1 py-2"
                 type="text" placeholder="Enter a location"
-            />
+            /> */}
+            <div className="relative mt-1 rounded-md shadow-sm">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
+                    <span className="text-gray-500 sm:text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </span>
+                </div>
+                <input
+                    id="pac-input"
+                    value={featuredCafe ? featuredCafe.name : inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="block w-full rounded-md border-gray-300 pl-10 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-1 py-2"
+                    type="text"
+                    placeholder="Enter a location"
+                />
+            </div>
+
+
             {featuredCafe && (
                 <div className="m-4 flex w-[80%] rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
                     {featuredCafe.photos && (
@@ -96,7 +117,8 @@ const FeaturedCafe = () => {
                 </div>
 
             )}
-            <Transition.Root show={dialogOpen} as={Fragment}>
+            <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={featuredCafe} />
+            {/* <Transition.Root show={dialogOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setDialogOpen(false)}>
                     <Transition.Child
                         as={Fragment}
@@ -174,7 +196,7 @@ const FeaturedCafe = () => {
                         </div>
                     </div>
                 </Dialog>
-            </Transition.Root>
+            </Transition.Root> */}
         </>
     )
 }
