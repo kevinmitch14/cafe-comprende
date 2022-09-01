@@ -42,12 +42,13 @@ const PlaceList = () => {
                     <><ViewListIcon className="h-4 w-4" /><span>List View</span></>}
             </label>
             <input className="hidden peer" type={"checkbox"} id="list" ref={cancelButtonRef} onChange={(e) => handleCheck(e)}></input>
-            <div className="divide-y hidden md:block w-full h-0 duration-500 peer-checked:h-auto peer-checked:block">
-                {data.map((cafe, index) => {
+            <div className="divide-y hidden md:block w-full duration-500 peer-checked:h-auto peer-checked:block">
+                <div>{data.map((cafe, index) => {
                     return (
                         <PlaceListItem key={index} cafe={cafe} />
                     )
                 })}
+                </div>
             </div>
         </div>
     )
