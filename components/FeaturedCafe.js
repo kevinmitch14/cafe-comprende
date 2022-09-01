@@ -33,7 +33,7 @@ const FeaturedCafe = () => {
     // const { isLoading, error, data } = useQuery(['cafes'], testingFetcher)
     // console.log(isLoading, error, data)
 
-    const mutation = useMutation(originalMutation, {
+    const addCafeMutation = useMutation(originalMutation, {
         // When mutate is called:
         onMutate: async newCafe => {
             // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
@@ -118,7 +118,7 @@ const FeaturedCafe = () => {
                 </div>
 
             )}
-            <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} mutation={mutation} />
+            <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} addCafeMutation={addCafeMutation} />
             {/* <Transition.Root show={dialogOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setDialogOpen(false)}>
                     <Transition.Child

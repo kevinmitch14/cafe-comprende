@@ -1,42 +1,11 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { OfficeBuildingIcon } from '@heroicons/react/solid'
-import { Mutation, useMutation, useQueryClient } from 'react-query'
 
-const Modal = ({ dialogOpen, cafe, setDialogOpen }) => {
+const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation }) => {
     const cancelButtonRef = useRef(null)
     const [rating, setRating] = useState(null)
 
-    const queryClient = useQueryClient()
-    const originalMutation = (newCafe) => {
-        return axios.post('/api/createReview', newCafe)
-    }
-
-    const mutation = useMutation(originalMutation, {
-        // When mutate is called:
-        onMutate: async newCafe => {
-            // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-            await queryClient.cancelQueries('cafes')
-            setFeaturedCafe(null)
-
-            // Snapshot the previous value
-            const previousTodos = queryClient.getQueryData('cafes')
-            console.log(previousTodos)
-            // Optimistically update to the new value
-            queryClient.setQueryData('cafes', old => [newCafe, ...old])
-
-            // Return a context object with the snapshotted value
-            return { previousTodos }
-        },
-        // If the mutation fails, use the context returned from onMutate to roll back
-        onError: (err, newCafe, context) => {
-            queryClient.setQueryData('cafes', context.previousTodos)
-        },
-        // Always refetch after error or success:
-        onSettled: () => {
-            queryClient.invalidateQueries('cafes')
-        },
-    })
 
     return (
         <Transition.Root show={dialogOpen} as={Fragment}>
@@ -96,7 +65,7 @@ const Modal = ({ dialogOpen, cafe, setDialogOpen }) => {
                                         type="button"
                                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                                         onClick={() => {
-                                            mutation.mutate({ ...cafe, rating })
+                                            addCafeMutation.mutate({ ...cafe, rating })
                                             setDialogOpen(false)
                                         }}
                                     >
