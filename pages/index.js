@@ -23,6 +23,7 @@ export default function Home() {
           <Dashboard />
           <PlaceList />
         </div>
+
         {/* <MapComponent /> */}
       </main>
     </div>
