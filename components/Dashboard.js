@@ -10,7 +10,7 @@ const Dashboard = () => {
     return (
         <div className="flex flex-col items-center justify-between gap-y-2 border-b bg-gray-50 py-4 text-center">
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
-            <div className="flex items-center">
+            <div className="flex md:flex-col items-center">
                 <Image
                     src="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
                     alt="logo"
