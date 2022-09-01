@@ -51,6 +51,7 @@ model Cafe {
   longitude Decimal
   name      String
   rating    Int
+  updatedAt DateTime @updatedAt
 }
 
 model Review {
