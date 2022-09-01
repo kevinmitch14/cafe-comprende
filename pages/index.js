@@ -18,12 +18,12 @@ export default function Home() {
           href="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
         />
       </Head>
-      <main className="flex">
-        <MapComponent />
-        <div className="h-[100vh] w-[30vw] overflow-scroll">
+      <main className="flex flex-col md:flex-row">
+        <div className="md:h-[100vh] md:w-[30vw] overflow-scroll">
           <Dashboard />
           <PlaceList />
         </div>
+        <MapComponent />
       </main>
     </div>
   );
