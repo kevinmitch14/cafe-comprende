@@ -1,11 +1,42 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { OfficeBuildingIcon } from '@heroicons/react/solid'
-import { Mutation } from 'react-query'
+import { Mutation, useMutation, useQueryClient } from 'react-query'
 
-const Modal = ({ dialogOpen, cafe, setDialogOpen, mutation }) => {
+const Modal = ({ dialogOpen, cafe, setDialogOpen }) => {
     const cancelButtonRef = useRef(null)
     const [rating, setRating] = useState(null)
+
+    const queryClient = useQueryClient()
+    const originalMutation = (newCafe) => {
+        return axios.post('/api/createReview', newCafe)
+    }
+
+    const mutation = useMutation(originalMutation, {
+        // When mutate is called:
+        onMutate: async newCafe => {
+            // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+            await queryClient.cancelQueries('cafes')
+            setFeaturedCafe(null)
+
+            // Snapshot the previous value
+            const previousTodos = queryClient.getQueryData('cafes')
+            console.log(previousTodos)
+            // Optimistically update to the new value
+            queryClient.setQueryData('cafes', old => [newCafe, ...old])
+
+            // Return a context object with the snapshotted value
+            return { previousTodos }
+        },
+        // If the mutation fails, use the context returned from onMutate to roll back
+        onError: (err, newCafe, context) => {
+            queryClient.setQueryData('cafes', context.previousTodos)
+        },
+        // Always refetch after error or success:
+        onSettled: () => {
+            queryClient.invalidateQueries('cafes')
+        },
+    })
 
     return (
         <Transition.Root show={dialogOpen} as={Fragment}>
