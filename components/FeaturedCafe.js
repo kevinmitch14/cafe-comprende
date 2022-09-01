@@ -117,7 +117,7 @@ const FeaturedCafe = () => {
                 </div>
 
             )}
-            <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={featuredCafe} />
+            <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} mutation={mutation} />
             {/* <Transition.Root show={dialogOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setDialogOpen(false)}>
                     <Transition.Child
