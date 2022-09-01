@@ -101,18 +101,19 @@ const FeaturedCafe = () => {
 
 
             {featuredCafe && (
-                <div className="m-4 flex w-[80%] rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
+                <div className="mt-4 flex rounded-md border border-gray-200 pr-2 hover:cursor-pointer hover:bg-gray-50">
                     {featuredCafe.photos && (
                         <Image
                             src={featuredCafe.photos[0].getUrl({ maxWidth: featuredCafe.photos[0].width, maxHeight: featuredCafe.photos[0].height })}
                             alt={"image"}
                             height={100}
                             width={150}
+                            className="rounded-l-md"
                         />
                     )}
-                    <div className="p-4 flex flex-col gap-y-2">
-                        <p>{featuredCafe.name}</p>
-                        <p onClick={() => setDialogOpen(true)}>Rate this cafe</p>
+                    <div className="p-4 items-start flex flex-col gap-y-2">
+                        <p className='font-bold'>{featuredCafe.name}</p>
+                        <button onClick={() => setDialogOpen(true)} className="underline">Rate this cafe</button>
                     </div>
                 </div>
 
