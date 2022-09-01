@@ -44,7 +44,7 @@ const FeaturedCafe = () => {
             const previousTodos = queryClient.getQueryData('cafes')
             console.log(previousTodos)
             // Optimistically update to the new value
-            queryClient.setQueryData('cafes', old => [...old, newCafe])
+            queryClient.setQueryData('cafes', old => [newCafe, ...old])
 
             // Return a context object with the snapshotted value
             return { previousTodos }
