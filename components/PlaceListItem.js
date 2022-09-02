@@ -1,8 +1,48 @@
 import React, { useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import Modal from './Modal'
+import axios from "axios";
+
 
 const PlaceListItem = ({ cafe }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [rating, setRating] = useState(null)
+
+    const queryClient = useQueryClient()
+    const originalMutation = (newCafe) => {
+        return axios.post('/api/createReview', newCafe)
+    }
+
+    const newCafe = {
+        name: cafe.name,
+        rating: rating,
+        latitude: cafe.latitude,
+        longitude: cafe.longitude,
+    }
+
+    const addCafeMutationFromList = useMutation(originalMutation, {
+        // When mutate is called:
+        onMutate: async newCafe => {
+            // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+            await queryClient.cancelQueries('cafes')
+
+            // Snapshot the previous value
+            const previousTodos = queryClient.getQueryData('cafes')
+            // Optimistically update to the new value
+            queryClient.setQueryData('cafes', old => [newCafe, ...old])
+
+            // Return a context object with the snapshotted value
+            return { previousTodos }
+        },
+        // If the mutation fails, use the context returned from onMutate to roll back
+        onError: (err, newCafe, context) => {
+            queryClient.setQueryData('cafes', context.previousTodos)
+        },
+        // Always refetch after error or success:
+        onSettled: () => {
+            queryClient.invalidateQueries('cafes')
+        },
+    })
 
     return (
         <div className='px-2 py-2 flex flex-col items-start'>
@@ -22,7 +62,7 @@ const PlaceListItem = ({ cafe }) => {
                     onClick={() => setDialogOpen(true)}>Rate
                 </button>
             </div>
-            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={cafe} />}
+            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} addCafeMutation={addCafeMutationFromList} />}
         </div>
     )
 }
