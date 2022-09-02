@@ -9,6 +9,9 @@ import { ChevronUpIcon } from "@heroicons/react/solid";
 
 
 export default function Home() {
+
+  console.log(process.env.NODE_ENV);
+
   return (
     <div>
       <Head>
