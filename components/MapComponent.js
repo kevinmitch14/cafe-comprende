@@ -27,7 +27,7 @@ const MapComponent = () => {
         <>
             <Map
                 ref={mapRef}
-                style={{ width: "70vw", height: "100vh" }}
+                style={{ width: "100vw", height: "100vh" }}
                 initialViewState={initialViewState}
                 mapStyle="mapbox://styles/mapbox/streets-v8"
                 mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}

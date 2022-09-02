@@ -4,7 +4,8 @@ import { useRef, useCallback, useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { useMutation, useQuery } from "react-query";
 import PlaceList from "../components/PlaceList";
-
+import FeaturedCafe from "../components/FeaturedCafe";
+import { ChevronUpIcon } from "@heroicons/react/solid";
 
 
 export default function Home() {
@@ -18,10 +19,10 @@ export default function Home() {
           href="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
         />
       </Head>
-      <main className="flex flex-col md:flex-row">
-        <div className="md:h-[100vh] md:w-[30vw] overflow-scroll">
+      <main className="relative flex flex-col h-[100vh] md:flex-row">
+        <div className="md:w-2/6 md:h-full md:overflow-y-auto">
           <Dashboard />
-          <PlaceList />
+          {/* <PlaceList /> */}
         </div>
         <MapComponent />
       </main>
