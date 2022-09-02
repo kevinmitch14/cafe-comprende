@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Script from 'next/script';
-import { Fragment, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query';
 import axios from "axios";
 import Modal from './Modal'

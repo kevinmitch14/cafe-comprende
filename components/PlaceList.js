@@ -1,8 +1,6 @@
 import { useQuery } from "react-query";
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { OfficeBuildingIcon, ViewListIcon } from '@heroicons/react/solid'
-import Modal from "./Modal";
+import { useRef, useState } from 'react'
+import { ViewListIcon } from '@heroicons/react/solid'
 import PlaceListItem from "./PlaceListItem";
 
 

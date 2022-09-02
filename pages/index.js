@@ -1,11 +1,6 @@
 import Head from "next/head";
 import MapComponent from "../components/MapComponent";
-import { useRef, useCallback, useState } from "react";
 import Dashboard from "../components/Dashboard";
-import { useMutation, useQuery } from "react-query";
-import PlaceList from "../components/PlaceList";
-import FeaturedCafe from "../components/FeaturedCafe";
-import { ChevronUpIcon } from "@heroicons/react/solid";
 
 
 export default function Home() {
@@ -25,7 +20,6 @@ export default function Home() {
       <main className="relative flex flex-col h-[100vh] md:flex-row">
         <div className="md:w-2/6 md:h-full md:overflow-y-auto">
           <Dashboard />
-          {/* <PlaceList /> */}
         </div>
         <MapComponent />
       </main>
