@@ -12,54 +12,24 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  latitude  Decimal
-  longitude Decimal
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-
-  @@index(authorId)
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bios   String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-
-  @@index(userId)
-}
-
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
-}
-
 model Cafe {
-  id        Int      @id @default(autoincrement())
-  reviews   Review[]
-  latitude  Decimal
-  longitude Decimal
-  name      String
-  rating    Int
+  googlePlaceID String   @id @unique
+  // id            Int      @id @default(autoincrement())
+  reviews       Review[]
+  latitude      Decimal
+  longitude     Decimal
+  name          String
+  // rating        Int
+  updatedAt     DateTime @updatedAt
 }
 
 model Review {
-  Cafe      Cafe?    @relation(fields: [cafeId], references: [id])
-  cafeId    Int?
+  id        Int     @id @default(autoincrement())
+  Cafe      Cafe    @relation(fields: [placeID], references: [googlePlaceID])
+  Account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
+  placeID   String
   rating    Int
-  id        Int      @id @default(autoincrement())
-  Account   Account? @relation(fields: [accountId], references: [id])
-  accountId Int?
 }
 
 model Account {
