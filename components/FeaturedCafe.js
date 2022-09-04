@@ -72,7 +72,7 @@ const FeaturedCafe = () => {
     return (
         <>
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
-            <div className="relative mt-1 rounded-md shadow-sm">
+            <div className="relative md:self-center mt-1 w-full md:w-[80%] rounded-md shadow-sm">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
                     <span className="text-gray-500 sm:text-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

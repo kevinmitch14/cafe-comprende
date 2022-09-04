@@ -50,7 +50,7 @@ const PlaceListItem = ({ cafe }) => {
         <div className='px-2 py-2 flex flex-col items-start'>
             <h3 className='font-bold text-lg'>{cafe.name}</h3>
 
-            <p>Rating: {cafeRating}/5<span className='pl-1 text-sm text-gray-500'>({cafe.reviews?.length})</span></p>
+            <p>Rating: {cafeRating}/5<span className='pl-1 text-sm text-gray-500'>({cafe.reviews?.length} {cafe.reviews?.length > 1 ? 'reviews' : 'review'})</span></p>
             <div className='flex gap-x-2'>
                 <button
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">

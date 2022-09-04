@@ -1,9 +1,7 @@
 import Map, {
     GeolocateControl,
-    Layer,
     Marker,
     NavigationControl,
-    Popup,
 } from "react-map-gl";
 import React, { useMemo, useRef, useState } from 'react'
 import "mapbox-gl/dist/mapbox-gl.css";

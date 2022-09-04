@@ -9,7 +9,6 @@ const PlaceList = () => {
 
     const cancelButtonRef = useRef(null)
     const [checked, setChecked] = useState(false)
-    console.log(checked)
     const handleCheck = (e) => {
         if (e.target.checked === true) {
             setChecked(true)
