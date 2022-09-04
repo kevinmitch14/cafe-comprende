@@ -1,9 +1,10 @@
 import prisma from "../../lib/prisma"
 
 export default async function handle(req, res) {
-    const Review = await prisma.cafe.create({
-        data:
-            req.body
+    console.log(req.body)
+    await prisma.cafe.create({
+        data: req.body
     })
+    const Review = await prisma.cafe.findMany({})
     res.json(Review)
 }   
