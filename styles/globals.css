@@ -36,6 +36,19 @@ a {
   padding: 6px
 }
 
+.mapboxgl-popup-content {
+padding-left: 12px !important;
+padding-right: 20px !important;
+padding-top: 16px !important;
+padding-bottom: 12px !important;
+border-radius: 8px !important;
+}
+
+.mapboxgl-popup-close-button {
+  padding: 4px !important;
+  top: 2px !important;
+  right: 4px !important;
+}
 
 @tailwind base;
 @tailwind components;
