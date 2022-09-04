@@ -44,6 +44,13 @@ padding-bottom: 12px !important;
 border-radius: 8px !important;
 }
 
+@media screen and (max-width: 480px) {
+  .mapboxgl-popup {
+    width: 80vw !important;
+    max-width: none !important;
+  }
+}
+
 .mapboxgl-popup-close-button {
   padding: 4px !important;
   top: 2px !important;

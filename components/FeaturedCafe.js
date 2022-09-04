@@ -12,6 +12,7 @@ const FeaturedCafe = () => {
     const [featuredCafe, setFeaturedCafe] = useState(null)
     const [dialogOpen, setDialogOpen] = useState(false)
     const cancelButtonRef = useRef(null)
+    console.log(featuredCafe);
 
 
     function initService() {

@@ -41,6 +41,10 @@ const MapComponent = () => {
                     onClick={e => {
                         e.originalEvent.stopPropagation();
                         setPopupInfo(cafe);
+                        mapContainer.current?.flyTo({
+                            center: [cafe.longitude, cafe.latitude],
+                            zoom: 5
+                        })
                     }}
                 >
                     <div className="flex flex-col items-start">

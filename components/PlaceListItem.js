@@ -8,19 +8,21 @@ const PlaceListItem = ({ cafe }) => {
     const [rating, setRating] = useState(null)
     const queryClient = useQueryClient()
     const originalMutation = (newCafe) => {
-        return axios.post('/api/createReview', newCafe)
+        return axios.post('/api/createTest', newCafe)
     }
 
     const newCafe = {
         name: cafe.name,
-        rating: rating,
         latitude: cafe.latitude,
         longitude: cafe.longitude,
+        googlePlaceID: cafe.googlePlaceID,
     }
 
     const cafeRating =
         cafe.reviews?.length > 0 &&
         cafe.reviews.reduce((prev, current) => prev + current.rating, 0)
+    const cafeNumberOfReviews = cafe.reviews?.length
+    const averageRating = cafeRating / cafeNumberOfReviews
 
     const addCafeMutationFromList = useMutation(originalMutation, {
         // When mutate is called:
@@ -31,7 +33,7 @@ const PlaceListItem = ({ cafe }) => {
             // Snapshot the previous value
             const previousTodos = queryClient.getQueryData('cafes')
             // Optimistically update to the new value
-            queryClient.setQueryData('cafes', old => [newCafe, ...old])
+            // queryClient.setQueryData('cafes', old => [newCafe, ...old])
 
             // Return a context object with the snapshotted value
             return { previousTodos }
@@ -50,15 +52,15 @@ const PlaceListItem = ({ cafe }) => {
         <div className='px-2 py-2 flex flex-col items-start'>
             <h3 className='font-bold text-lg'>{cafe.name}</h3>
 
-            <p>Rating: {cafeRating}/5<span className='pl-1 text-sm text-gray-500'>({cafe.reviews?.length} {cafe.reviews?.length > 1 ? 'reviews' : 'review'})</span></p>
+            <p>Rating: {averageRating.toFixed(2)}/5<span className='pl-1 text-sm text-gray-500'>({cafe.reviews?.length} {cafe.reviews?.length > 1 ? 'reviews' : 'review'})</span></p>
             <div className='flex gap-x-2'>
-                <button
+                {/* <button
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>
-                </button>
+                </button> */}
                 <button
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                     onClick={() => setDialogOpen(true)}>Rate

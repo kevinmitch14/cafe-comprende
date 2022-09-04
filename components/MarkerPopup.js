@@ -14,6 +14,7 @@ const MarkerPopup = ({ popupInfo, setPopupInfo }) => {
             longitude={Number(popupInfo.longitude)}
             latitude={Number(popupInfo.latitude)}
             onClose={() => setPopupInfo(null)}
+            className={"w-full"}
         >
             <p className="font-bold text-sm">{popupInfo.name}</p>
             <p>{popupInfo.reviews.reduce((prev, current) => prev + current.rating, 0)}/5 -{' '}
