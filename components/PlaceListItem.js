@@ -3,11 +3,9 @@ import { useMutation, useQueryClient } from 'react-query'
 import Modal from './Modal'
 import axios from "axios";
 
-
 const PlaceListItem = ({ cafe }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [rating, setRating] = useState(null)
-
     const queryClient = useQueryClient()
     const originalMutation = (newCafe) => {
         return axios.post('/api/createReview', newCafe)
@@ -19,6 +17,10 @@ const PlaceListItem = ({ cafe }) => {
         latitude: cafe.latitude,
         longitude: cafe.longitude,
     }
+
+    const cafeRating =
+        cafe.reviews?.length > 0 &&
+        cafe.reviews.reduce((prev, current) => prev + current.rating, 0)
 
     const addCafeMutationFromList = useMutation(originalMutation, {
         // When mutate is called:
@@ -48,7 +50,7 @@ const PlaceListItem = ({ cafe }) => {
         <div className='px-2 py-2 flex flex-col items-start'>
             <h3 className='font-bold text-lg'>{cafe.name}</h3>
 
-            <p>Rating: {cafe.rating}/5</p>
+            <p>Rating: {cafeRating}/5<span className='pl-1 text-sm text-gray-500'>({cafe.reviews?.length})</span></p>
             <div className='flex gap-x-2'>
                 <button
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">

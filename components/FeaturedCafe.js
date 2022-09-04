@@ -25,6 +25,7 @@ const FeaturedCafe = () => {
 
     const queryClient = useQueryClient()
     const originalMutation = (newCafe) => {
+        // return axios.post('/api/createReview', newCafe)
         return axios.post('/api/createReview', newCafe)
     }
 
@@ -59,9 +60,9 @@ const FeaturedCafe = () => {
 
     const newCafe = {
         name: featuredCafe?.name,
-        rating: rating,
-        latitude: featuredCafe?.geometry.location.lat().toFixed(2),
-        longitude: featuredCafe?.geometry.location.lng().toFixed(2),
+        latitude: featuredCafe?.geometry.location.lat(),
+        longitude: featuredCafe?.geometry.location.lng(),
+        googlePlaceID: featuredCafe?.place_id,
     }
 
     if (typeof window !== 'undefined') {
@@ -71,14 +72,6 @@ const FeaturedCafe = () => {
     return (
         <>
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
-
-            {/* <input
-                id="pac-input"
-                value={featuredCafe ? featuredCafe.name : inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="w-[80%] relative rounded-md border border-gray-300 p-1 py-2"
-                type="text" placeholder="Enter a location"
-            /> */}
             <div className="relative mt-1 rounded-md shadow-sm">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
                     <span className="text-gray-500 sm:text-sm">

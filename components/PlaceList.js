@@ -25,8 +25,6 @@ const PlaceList = () => {
         )
     )
 
-    if (isLoading) return
-
     if (error) return 'An error has occurred: ' + error.message
 
     return (
@@ -41,12 +39,12 @@ const PlaceList = () => {
             </label>
             <input className="hidden peer" type={"checkbox"} id="list" ref={cancelButtonRef} onChange={(e) => handleCheck(e)}></input>
             <div className="divide-y hidden md:block w-full duration-500 peer-checked:h-auto peer-checked:block">
-                <div>{data.map((cafe, index) => {
+                {!isLoading && <div>{data.map((cafe, index) => {
                     return (
                         <PlaceListItem key={index} cafe={cafe} />
                     )
                 })}
-                </div>
+                </div>}
             </div>
         </div>
     )

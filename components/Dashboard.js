@@ -18,6 +18,7 @@ const Dashboard = () => {
                     style={css}
                     width={30}
                     height={32}
+                    priority={true}
                 />
                 <h1 className="text-xl md:text-3xl font-bold text-gray-700">Café Comprende</h1>
                 <p className="hidden md:block text-xl font-light text-gray-500">Pick a cafe, rate it!</p>
