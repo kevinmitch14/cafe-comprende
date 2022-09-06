@@ -28,7 +28,6 @@ const MapComponent = () => {
         )
     )
 
-    const geoRef = useRef();
     const mapContainer = useRef(null);
 
     const markers = useMemo(() =>
@@ -67,7 +66,6 @@ const MapComponent = () => {
 
             >
                 <GeolocateControl
-                    // ref={geoRef}
                     position="top-left"
                     trackUserLocation={true}
                     fitBoundsOptions={{ maxZoom: 12 }}
@@ -75,18 +73,6 @@ const MapComponent = () => {
                 <NavigationControl position="top-left" />
                 {markers}
                 {popupInfo && (
-                    // <Popup
-                    //     anchor="top"
-                    //     focusAfterOpen={false}
-                    //     longitude={Number(popupInfo.longitude)}
-                    //     latitude={Number(popupInfo.latitude)}
-                    //     onClose={() => setPopupInfo(null)}
-                    // >
-                    //     <p className="font-bold text-sm">{popupInfo.name}</p>
-                    //     <p>{popupInfo.reviews.reduce((prev, current) => prev + current.rating, 0)}/5 -{' '}
-                    //         <span className="text-[10px]">{popupInfo.reviews.length} {popupInfo.reviews.length > 1 ? 'reviews' : 'review'}</span></p>
-                    //     <button className="text-blue-500 underline text-[10px] hover:cursor-pointer">More details</button>
-                    // </Popup>
                     <MarkerPopup popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
                 )}
             </Map>

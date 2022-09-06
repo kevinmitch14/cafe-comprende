@@ -1,6 +1,5 @@
 import Image from "next/future/image";
 import React from "react";
-import Script from "next/script";
 import FeaturedCafe from "./FeaturedCafe";
 import PlaceList from "./PlaceList";
 
@@ -10,7 +9,6 @@ const Dashboard = () => {
 
     return (
         <div className="sticky top-0 w-full flex flex-col justify-between gap-y-2 bg-gray-50 pt-4 text-center">
-            <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
             <div className="flex justify-center md:flex-col items-center">
                 <Image
                     src="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
