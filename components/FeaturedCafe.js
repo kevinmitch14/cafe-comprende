@@ -1,11 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Script from 'next/script';
 import { useState } from 'react'
-import { useMutation, useQueryClient } from 'react-query';
-import axios from "axios";
 import Modal from './Modal'
 import dynamic from 'next/dynamic';
-import Image from 'next/future/image';
 
 const ToastComp = dynamic(() => import('../components/Toast'), {
     ssr: false
@@ -27,29 +24,6 @@ const FeaturedCafe = () => {
             setInputValue("")
         });
     }
-
-    const queryClient = useQueryClient()
-    const originalMutation = (newCafe) => {
-        return axios.post('/api/createReview', newCafe)
-    }
-
-    const addCafeMutation = useMutation(originalMutation, {
-        onMutate: async newCafe => {
-            await queryClient.cancelQueries('cafes')
-            setFeaturedCafe(null)
-
-            const previousTodos = queryClient.getQueryData('cafes')
-            queryClient.setQueryData('cafes', old => [newCafe, ...old])
-
-            return { previousTodos }
-        },
-        onError: (err, newCafe, context) => {
-            queryClient.setQueryData('cafes', context.previousTodos)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries('cafes')
-        },
-    })
 
     const newCafe = {
         name: featuredCafe?.name,
@@ -85,7 +59,7 @@ const FeaturedCafe = () => {
 
             {featuredCafe && (
                 <div className="relative mt-4 overflow-hidden flex h-auto rounded-md border border-gray-200 hover:cursor-pointer hover:bg-gray-50">
-                    <div className='absolute top-0 hover:bg-gray-100 right-0 p-1 border-b border-l rounded-bl-md' onClick={() => setFeaturedCafe(null)}>
+                    <div className='absolute top-0 hover:bg-gray-100 right-0 p-1' onClick={() => setFeaturedCafe(null)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-900">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -108,7 +82,7 @@ const FeaturedCafe = () => {
                     </div>
                 </div>
             )}
-            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} addCafeMutation={addCafeMutation} setOpen={setOpen} />}
+            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setFeaturedCafe={setFeaturedCafe} cafe={newCafe} setOpen={setOpen} />}
             {open && <ToastComp open={open} setOpen={setOpen} cafe={newCafe} />}
         </div>
     )

@@ -7,7 +7,7 @@ const PlaceListItem = ({ cafe }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const queryClient = useQueryClient()
     const originalMutation = (newCafe) => {
-        return axios.post('/api/createTest', newCafe)
+        return axios.post('/api/createReview', newCafe)
     }
 
     const newCafe = {

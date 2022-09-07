@@ -1,11 +1,39 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { OfficeBuildingIcon } from '@heroicons/react/solid'
+import { useMutation, useQueryClient } from 'react-query'
+import axios from 'axios'
 
-const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation, setOpen }) => {
+const Modal = ({ dialogOpen, cafe, setDialogOpen, setOpen, setFeaturedCafe }) => {
     const cancelButtonRef = useRef(null)
     const [rating, setRating] = useState(null)
+    const [loading, setLoading] = useState(false)
 
+    const queryClient = useQueryClient()
+    const originalMutation = (newCafe) => {
+        return axios.post('/api/createReview', newCafe)
+    }
+
+    const addCafeMutation = useMutation(originalMutation, {
+        onMutate: async newCafe => {
+            await queryClient.cancelQueries('cafes')
+            // setFeaturedCafe(null)
+            setLoading(true)
+            const previousTodos = queryClient.getQueryData('cafes')
+            // queryClient.setQueryData('cafes', old => [newCafe, ...old])
+            // return { previousTodos }
+        },
+        onError: (err, newCafe, context) => {
+            queryClient.setQueryData('cafes', context.previousTodos)
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries('cafes')
+            setLoading(false)
+            setDialogOpen(false)
+            setOpen(true)
+            setFeaturedCafe(null)
+        },
+    })
 
     return (
         <Transition.Root show={dialogOpen} as={Fragment}>
@@ -63,14 +91,20 @@ const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation, setOpen }) =>
                                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                     <button
                                         type="button"
-                                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                        className="w-full min-w-[80px] inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm"
                                         onClick={() => {
                                             addCafeMutation.mutate({ ...cafe, rating })
-                                            setDialogOpen(false)
-                                            setOpen(true)
+                                            // setDialogOpen(false)
+                                            // setOpen(true)
                                         }}
                                     >
-                                        Submit
+                                        {loading ?
+                                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            :
+                                            'Submit'}
                                     </button>
                                     <button
                                         type="button"
@@ -86,7 +120,7 @@ const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation, setOpen }) =>
                     </div>
                 </div>
             </Dialog>
-        </Transition.Root>
+        </Transition.Root >
     )
 }
 
