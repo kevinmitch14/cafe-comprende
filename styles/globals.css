@@ -43,6 +43,13 @@ padding-top: 16px !important;
 padding-bottom: 12px !important;
 border-radius: 8px !important;
 }
+.mapboxgl-ctrl-attrib a {
+  color: transparent !important;
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  background-color: transparent !important;
+}
 
 @media screen and (max-width: 480px) {
   .mapboxgl-popup {

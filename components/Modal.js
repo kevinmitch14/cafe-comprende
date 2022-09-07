@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { OfficeBuildingIcon } from '@heroicons/react/solid'
 
-const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation }) => {
+const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation, setOpen }) => {
     const cancelButtonRef = useRef(null)
     const [rating, setRating] = useState(null)
 
@@ -67,6 +67,7 @@ const Modal = ({ dialogOpen, cafe, setDialogOpen, addCafeMutation }) => {
                                         onClick={() => {
                                             addCafeMutation.mutate({ ...cafe, rating })
                                             setDialogOpen(false)
+                                            setOpen(true)
                                         }}
                                     >
                                         Submit

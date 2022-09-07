@@ -14,6 +14,8 @@
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@prisma/client": "^4.3.0",
+    "@radix-ui/react-portal": "^1.0.0",
+    "@radix-ui/react-toast": "^1.0.0",
     "axios": "^0.27.2",
     "mapbox-gl": "^2.10.0",
     "next": "^12.2.5",

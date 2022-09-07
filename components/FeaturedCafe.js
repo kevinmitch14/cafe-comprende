@@ -1,16 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import Script from 'next/script';
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query';
 import axios from "axios";
 import Modal from './Modal'
+import dynamic from 'next/dynamic';
+import Image from 'next/future/image';
 
+const ToastComp = dynamic(() => import('../components/Toast'), {
+    ssr: false
+})
 
 const FeaturedCafe = () => {
     const [inputValue, setInputValue] = useState("")
     const [featuredCafe, setFeaturedCafe] = useState(null)
     const [dialogOpen, setDialogOpen] = useState(false)
-    const cancelButtonRef = useRef(null)
+    const [open, setOpen] = useState(false)
 
 
     function initService() {
@@ -58,7 +63,7 @@ const FeaturedCafe = () => {
     }
 
     return (
-        <div className='px-2'>
+        <div className='px-2 md:px-4'>
             <Script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NODE_ENV == "development" ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL : process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&callback=initService&libraries=places`} />
             <div className="relative md:self-center mt-1 w-full rounded-md shadow-sm">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
@@ -79,7 +84,12 @@ const FeaturedCafe = () => {
             </div>
 
             {featuredCafe && (
-                <div className="mt-4 flex h-auto rounded-md border border-gray-200 hover:cursor-pointer hover:bg-gray-50">
+                <div className="relative mt-4 overflow-hidden flex h-auto rounded-md border border-gray-200 hover:cursor-pointer hover:bg-gray-50">
+                    <div className='absolute top-0 hover:bg-gray-100 right-0 p-1 border-b border-l rounded-bl-md' onClick={() => setFeaturedCafe(null)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-900">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
                     {featuredCafe.photos && (
                         <div className='w-2/5'>
                             <img
@@ -98,7 +108,8 @@ const FeaturedCafe = () => {
                     </div>
                 </div>
             )}
-            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} addCafeMutation={addCafeMutation} />}
+            {dialogOpen && <Modal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} cafe={newCafe} addCafeMutation={addCafeMutation} setOpen={setOpen} />}
+            {open && <ToastComp open={open} setOpen={setOpen} cafe={newCafe} />}
         </div>
     )
 }
