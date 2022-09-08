@@ -6,12 +6,14 @@ import { useEffect } from 'react';
 // export const ToastRoot = ToastPrimitive.Root;
 // export const ToastViewport = ToastPrimitive.Viewport;
 
+const StyledRoot = (ToastPrimitive.Root, {
+})
 
 const Toast = ({ open, setOpen, cafe }) => {
     return (
         <Portal.Root>
             <ToastPrimitive.Provider swipeDirection="right">
-                <ToastPrimitive.Root asChild={true} duration={1500} open={open} onOpenChange={setOpen}>
+                <ToastPrimitive.Root className={`${open && 'animate-[testerKey_.4s_ease-in-out]'}`} asChild={true} duration={1500} open={open} onOpenChange={setOpen}>
                     <div className='bg-white border border-gray-400 rounded-lg overflow-hidden'>
                         <div className="relative space-y-5 overflow-hidden bg-white/5 p-4 shadow-xl shadow-black/5 before:absolute before:inset-0 before:-translate-x-full before:animate-shimmer before:border-rose-100/10 before:bg-gradient-to-r before:from-transparent before:via-gray-300/20 before:to-transparent">
                             <div className="flex space-x-1">
