@@ -1,22 +1,20 @@
-import { Map, GeolocateControl, Marker, NavigationControl } from "react-map-gl";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Map, GeolocateControl, NavigationControl } from "react-map-gl";
+import React, { useCallback, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import MarkerPopup from "./MarkerPopup";
 import { INITIAL_VIEW_STATE } from "../../utils/constants";
-import { useCafes } from "../../hooks/useCafes";
-import { CafeDetailsModal } from "../Modal/CafeDetailsModal";
 import { CafeProps } from "../Cafe/Cafe.types";
-import { MapPoint } from "./MapPoint";
 import Markers from "./Markers";
+import { useQueryClient } from "@tanstack/react-query";
 
-// TODO convert to Typescript
 export const MapComponent = () => {
   const [cafe, setCafe] = useState<CafeProps | null>(null);
-  const { data, isLoading, isError, error } = useCafes();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  // const [dialogOpen, setDialogOpen] = useState(false);
   // const handleDialog = () => {
   //     dialogOpen ? setDialogOpen(false) : setDialogOpen(true)
   // }
+  const queryClient = useQueryClient();
+  const cafes = queryClient.getQueryData(["cafes"]) as CafeProps[];
 
   const handleCafeUnselect = () => {
     setCafe(null);
@@ -26,8 +24,6 @@ export const MapComponent = () => {
     setCafe(selectedCafe);
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error ${error.message}</p>;
   return (
     <div className="h-full w-full">
       <Map
@@ -42,7 +38,7 @@ export const MapComponent = () => {
           fitBoundsOptions={{ maxZoom: 12 }}
         />
         <NavigationControl position="top-right" />
-        <Markers data={data} selectCafe={selectCafe} />
+        <Markers data={cafes} selectCafe={selectCafe} />
         {cafe && (
           <MarkerPopup cafe={cafe} handleCafeUnselect={handleCafeUnselect} />
         )}

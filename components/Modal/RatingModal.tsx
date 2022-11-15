@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { OfficeBuildingIcon } from "@heroicons/react/solid";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CafeDTO, CafeProps } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
@@ -21,10 +21,10 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
     },
     {
       onMutate: async () => {
-        await queryClient.cancelQueries("cafes");
+        await queryClient.cancelQueries(["cafes"]);
       },
       onSettled: () => {
-        queryClient.invalidateQueries("cafes");
+        queryClient.invalidateQueries(["cafes"]);
         handleDialog();
       },
     }
