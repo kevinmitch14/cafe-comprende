@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import React, { memo } from "react";
 import { Marker } from "react-map-gl";
 import { CafeProps } from "../Cafe/Cafe.types";
 import { MapPoint } from "./MapPoint";
@@ -11,7 +11,6 @@ type MarkerProps = {
 
 const Markers = memo(function Markers({ data, selectCafe }: MarkerProps) {
   const { current: map } = useMap();
-  console.log(map);
   return (
     <div>
       {data?.map((cafe) => {

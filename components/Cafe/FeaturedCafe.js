@@ -131,6 +131,7 @@ export const FeaturedCafe = () => {
           setOpen={setOpen}
         />
       )}
+      {/* TODO fix toast comp */}
       {open && <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />}
     </div>
   );
