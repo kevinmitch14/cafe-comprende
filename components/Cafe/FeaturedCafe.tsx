@@ -5,36 +5,42 @@ import { RatingModal } from "..";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
+declare global {
+  interface Window {
+    initService: () => void;
+  }
+}
+
 const ToastComp = dynamic(() => import("../../utils/Toast"), {
   ssr: false,
   // ignore dangerous hydration
 });
 
-
+// TODO convert to TypeScript
 export const FeaturedCafe = () => {
   const [inputValue, setInputValue] = useState("");
-  const [featuredCafe, setFeaturedCafe] = useState(null);
+  const [featuredCafe, setFeaturedCafe] =
+    useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
-
   const handleDialog = () => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
   };
 
   function initService() {
     const options = { types: ["cafe"] };
-    const input = document.getElementById("pac-input");
+    const input = document.getElementById("pac-input") as HTMLInputElement;
     const autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener("place_changed", () => {
       setFeaturedCafe(autocomplete.getPlace());
       setInputValue("");
     });
   }
-
+  // TODO: Parse Google API response with Zod?
   const newCafe = {
     name: featuredCafe?.name,
-    latitude: featuredCafe?.geometry.location.lat(),
-    longitude: featuredCafe?.geometry.location.lng(),
+    latitude: featuredCafe?.geometry?.location?.lat(),
+    longitude: featuredCafe?.geometry?.location?.lng(),
     googlePlaceID: featuredCafe?.place_id,
   };
 
@@ -45,10 +51,11 @@ export const FeaturedCafe = () => {
   return (
     <div className="px-2 md:px-4">
       <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NODE_ENV == "development"
-          ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
-          : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-          }&callback=initService&libraries=places`}
+        src={`https://maps.googleapis.com/maps/api/js?key=${
+          process.env.NODE_ENV == "development"
+            ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
+            : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+        }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
@@ -84,9 +91,9 @@ export const FeaturedCafe = () => {
           {featuredCafe.photos && (
             <div className="w-2/6">
               <img
-                src={featuredCafe.photos[0].getUrl({
-                  maxWidth: featuredCafe.photos[0].width,
-                  maxHeight: featuredCafe.photos[0].height,
+                src={featuredCafe?.photos[0]?.getUrl({
+                  maxWidth: featuredCafe?.photos[0].width,
+                  maxHeight: featuredCafe?.photos[0].height,
                 })}
                 alt={"image"}
                 className="aspect-square h-full w-full rounded-l-md object-cover"
@@ -126,13 +133,15 @@ export const FeaturedCafe = () => {
       {dialogOpen && (
         <RatingModal
           handleDialog={handleDialog}
-          setFeaturedCafe={setFeaturedCafe}
           cafe={newCafe}
-          setOpen={setOpen}
+          // setFeaturedCafe={setFeaturedCafe}
+          // setOpen={setOpen}
         />
       )}
       {/* TODO fix toast comp */}
-      {open && <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />}
+      {/* {open &&  */}
+      <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />
+      {/* } */}
     </div>
   );
 };
