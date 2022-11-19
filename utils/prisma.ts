@@ -1,3 +1,5 @@
+//TODO: Edge runtime for cold starts
+// Planetscale + Typescirpt (https://github.com/koskimas/kysely)
 // src/server/db/client.ts
 import { PrismaClient } from "@prisma/client";
 

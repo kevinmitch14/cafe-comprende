@@ -7,7 +7,7 @@ import { CafeDTO, CafeProps } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 
 type RatingModalProps = {
-  cafe: CafeProps;
+  cafe: any;
   handleDialog: () => void;
 };
 
@@ -85,7 +85,7 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
               type="button"
               className="inline-flex w-full min-w-[80px] justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={() => {
-                addCafeFromList.mutate({ ...cafe, rating });
+                addCafeFromList.mutate({ ...(cafe as CafeDTO), rating });
               }}
             >
               {addCafeFromList.isLoading ? (

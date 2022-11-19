@@ -5,7 +5,8 @@ import MarkerPopup from "./MarkerPopup";
 import { INITIAL_VIEW_STATE } from "../../utils/constants";
 import { CafeProps } from "../Cafe/Cafe.types";
 import Markers from "./Markers";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCafes } from "../../hooks/useCafes";
+import { LoadingSpinner } from "../../utils/LoadingSpinner";
 
 export const MapComponent = () => {
   const [cafe, setCafe] = useState<CafeProps | null>(null);
@@ -13,17 +14,22 @@ export const MapComponent = () => {
   // const handleDialog = () => {
   //     dialogOpen ? setDialogOpen(false) : setDialogOpen(true)
   // }
-  const queryClient = useQueryClient();
-  const cafes = queryClient.getQueryData(["cafes"]) as CafeProps[];
-
   const handleCafeUnselect = () => {
     setCafe(null);
   };
+
+  const { isLoading, isError, error, data } = useCafes();
 
   const selectCafe = useCallback((selectedCafe: CafeProps) => {
     setCafe(selectedCafe);
   }, []);
 
+  if (isError)
+    return <div className="h-full w-full">Error ${error.message}</div>;
+  if (isLoading)
+    return (
+      <div className="h-full w-full">{isLoading && <LoadingSpinner />}</div>
+    );
   return (
     <div className="h-full w-full">
       <Map
@@ -38,7 +44,7 @@ export const MapComponent = () => {
           fitBoundsOptions={{ maxZoom: 12 }}
         />
         <NavigationControl position="top-right" />
-        <Markers data={cafes} selectCafe={selectCafe} />
+        <Markers data={data} selectCafe={selectCafe} />
         {cafe && (
           <MarkerPopup cafe={cafe} handleCafeUnselect={handleCafeUnselect} />
         )}

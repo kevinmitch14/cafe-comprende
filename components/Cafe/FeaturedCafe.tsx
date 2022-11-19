@@ -116,13 +116,13 @@ export const FeaturedCafe = () => {
             <div className="flex gap-x-2">
               <button
                 onClick={() => setDialogOpen(true)}
-                className="flex-1 rounded-md border border-emerald-500 bg-emerald-500 py-1.5 px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-emerald-500"
+                className="flex-1 rounded-md border border-emerald-500 bg-emerald-500 py-1.5 px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-emerald-600"
               >
                 Rate
               </button>
               <button
                 onClick={() => setFeaturedCafe(null)}
-                className="flex-1 rounded-md border border-red-600 bg-red-600 py-1.5 px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-red-600"
+                className="flex-1 rounded-md border border-red-600 bg-red-600 py-1.5  px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-red-700"
               >
                 Cancel
               </button>
@@ -139,9 +139,7 @@ export const FeaturedCafe = () => {
         />
       )}
       {/* TODO fix toast comp */}
-      {/* {open &&  */}
-      <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />
-      {/* } */}
+      {/* {open && <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />} */}
     </div>
   );
 };
