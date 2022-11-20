@@ -13,19 +13,19 @@ datasource db {
 }
 
 model Cafe {
-  googlePlaceID String   @id @unique
+  place_id  String   @id @unique
   // id            Int      @id @default(autoincrement())
-  reviews       Review[]
-  latitude      Decimal
-  longitude     Decimal
-  name          String
+  reviews   Review[]
+  latitude  Decimal
+  longitude Decimal
+  name      String
   // rating        Int
-  updatedAt     DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
 
 model Review {
   id        Int     @id @default(autoincrement())
-  Cafe      Cafe    @relation(fields: [place_id], references: [googlePlaceID])
+  Cafe      Cafe    @relation(fields: [place_id], references: [place_id])
   Account   Account @relation(fields: [accountId], references: [id])
   accountId Int
   place_id  String
