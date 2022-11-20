@@ -18,10 +18,10 @@ export default async function handle(
           Cafe: {
             connectOrCreate: {
               where: {
-                googlePlaceID: place_id,
+                place_id: place_id,
               },
               create: {
-                googlePlaceID: place_id,
+                place_id: place_id,
                 latitude: latitude,
                 longitude: longitude,
                 name: name,
