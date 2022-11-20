@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Cafe {
+  googlePlaceID String   @id @unique
+  // id            Int      @id @default(autoincrement())
+  reviews       Review[]
+  latitude      Decimal
+  longitude     Decimal
+  name          String
+  // rating        Int
+  updatedAt     DateTime @updatedAt
+}
+
+model Review {
+  id        Int     @id @default(autoincrement())
+  Cafe      Cafe    @relation(fields: [placeID], references: [googlePlaceID])
+  Account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
+  placeID   String
+  rating    Int
+}
+
+model Account {
+  id       Int      @id @default(autoincrement())
+  username String
+  reviews  Review[]
+}
