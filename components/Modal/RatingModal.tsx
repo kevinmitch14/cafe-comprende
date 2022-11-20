@@ -83,12 +83,12 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
                     );
                   })}
                 </div>
-                <div className="mt-4 flex space-x-2">
+                {/* <div className="mt-4 flex space-x-2">
                   <FeatureButton text="Price" />
                   <FeatureButton text="Wifi" />
                   <FeatureButton text="Coffee" />
                   <FeatureButton text="Parking" />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
