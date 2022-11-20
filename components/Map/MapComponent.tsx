@@ -28,7 +28,10 @@ export const MapComponent = () => {
     return <div className="h-full w-full">Error ${error.message}</div>;
   if (isLoading)
     return (
-      <div className="h-full w-full">{isLoading && <LoadingSpinner />}</div>
+      <div className="flex h-full w-full items-center justify-center">
+        {/* TODO add props to size the loading spinner? */}
+        {isLoading && <LoadingSpinner />}
+      </div>
     );
   return (
     <div className="h-full w-full">
