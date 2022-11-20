@@ -16,7 +16,7 @@ const Markers = memo(function Markers({ data, selectCafe }: MarkerProps) {
       {data?.map((cafe) => {
         return (
           <Marker
-            key={cafe.googlePlaceID}
+            key={cafe.place_id}
             latitude={cafe.latitude}
             longitude={cafe.longitude}
             onClick={(e) => {
