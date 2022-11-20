@@ -3,12 +3,12 @@ import { Dialog } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { CafeDTO, CafeProps, GooglePlacesResponse } from "../Cafe/Cafe.types";
+import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 import { LoadingSpinner } from "../../utils/LoadingSpinner";
 
 type RatingModalProps = {
-  cafe: GooglePlacesResponse | CafeProps;
+  cafe: CafeDTO;
   handleDialog: () => void;
 };
 
@@ -50,9 +50,9 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
   // TODO implement Zod function in the parse
   const newCafe = {
     name: cafe.name,
-    latitude: cafe.geometry?.location?.lat(),
-    longitude: cafe.geometry?.location?.lng(),
-    googlePlaceID: cafe.place_id,
+    latitude: cafe.latitude,
+    longitude: cafe.longitude,
+    place_id: cafe.place_id,
   };
 
   return (
