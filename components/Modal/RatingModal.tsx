@@ -1,14 +1,31 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { OfficeBuildingIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { CafeDTO, CafeProps } from "../Cafe/Cafe.types";
+import { CafeDTO, CafeProps, GooglePlacesResponse } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
+import { LoadingSpinner } from "../../utils/LoadingSpinner";
 
 type RatingModalProps = {
-  cafe: any;
+  cafe: GooglePlacesResponse | CafeProps;
   handleDialog: () => void;
+};
+
+const FeatureButton = ({ text }: { text: string }) => {
+  const [toggled, setToggled] = useState(false);
+  return (
+    <button
+      type="button"
+      className={`rounded border bg-gray-100 p-1 text-sm ${toggled && ""}`}
+      onClick={() => setToggled((prev) => !prev)}
+    >
+      <div className="flex items-center justify-center gap-1">
+        {text}{" "}
+        {toggled && <CheckCircleIcon className="h-4 w-4 text-emerald-600" />}
+      </div>
+    </button>
+  );
 };
 
 export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
@@ -30,52 +47,47 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
     }
   );
 
+  // TODO implement Zod function in the parse
+  const newCafe = {
+    name: cafe.name,
+    latitude: cafe.geometry?.location?.lat(),
+    longitude: cafe.geometry?.location?.lng(),
+    googlePlaceID: cafe.place_id,
+  };
+
   return (
     <ModalLayout
       handleDialog={handleDialog}
       content={
-        <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+        <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="sm:flex sm:items-start">
-              <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10">
-                <OfficeBuildingIcon
-                  className="h-6 w-6 text-gray-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="mt-3 text-center sm:mt-0 sm:ml-4">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  {cafe.name}
-                </Dialog.Title>
-                <div className="mt-2 ">
-                  <p className="text-sm text-gray-500">
-                    Blah Blah Blah, rate this cafe.
-                  </p>
-                  <div className="flex justify-center gap-x-1 text-sm">
-                    {[1, 2, 3, 4, 5].map((number) => {
-                      return (
-                        <button
-                          key={`rating-button ${number}`}
-                          className="bold rounded-lg border p-1 px-4 transition-[focus] duration-500 hover:bg-gray-100 focus:bg-emerald-600 focus:text-white"
-                          onClick={() => setRating(number)}
-                          value={number}
-                        >
-                          {number}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <label htmlFor="comments" className="text-sm text-gray-500">
-                    Additional comments
-                  </label>
-                  <textarea
-                    id="comments"
-                    name="comments"
-                    className="w-full bg-gray-100 text-sm"
-                  ></textarea>
+            <div className="mt-3 flex flex-col items-center">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900"
+              >
+                {cafe.name}
+              </Dialog.Title>
+              <div className="mt-2 ">
+                <div className="flex justify-center gap-x-1 text-sm">
+                  {[1, 2, 3, 4, 5].map((number) => {
+                    return (
+                      <button
+                        key={`rating-button ${number}`}
+                        className="bold rounded-lg border p-1 px-4 transition-[focus] duration-500 hover:bg-gray-100 focus:bg-emerald-600 focus:text-white"
+                        onClick={() => setRating(number)}
+                        value={number}
+                      >
+                        {number}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-4 flex space-x-2">
+                  <FeatureButton text="Price" />
+                  <FeatureButton text="Wifi" />
+                  <FeatureButton text="Coffee" />
+                  <FeatureButton text="Parking" />
                 </div>
               </div>
             </div>
@@ -85,33 +97,10 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
               type="button"
               className="inline-flex w-full min-w-[80px] justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={() => {
-                addCafeFromList.mutate({ ...(cafe as CafeDTO), rating });
+                addCafeFromList.mutate({ ...newCafe, rating });
               }}
             >
-              {addCafeFromList.isLoading ? (
-                <svg
-                  className="h-5 w-5 animate-spin text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              ) : (
-                "Submit"
-              )}
+              {addCafeFromList.isLoading ? <LoadingSpinner /> : "Submit"}
             </button>
             <button
               type="button"

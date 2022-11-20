@@ -3,8 +3,8 @@ import Script from "next/script";
 import { useState } from "react";
 import { RatingModal } from "..";
 import dynamic from "next/dynamic";
-import Image from "next/image";
-
+import { z } from "zod";
+import { GooglePlacesAPIValidator } from "./Cafe.types";
 declare global {
   interface Window {
     initService: () => void;
@@ -36,13 +36,8 @@ export const FeaturedCafe = () => {
       setInputValue("");
     });
   }
-  // TODO: Parse Google API response with Zod?
-  const newCafe = {
-    name: featuredCafe?.name,
-    latitude: featuredCafe?.geometry?.location?.lat(),
-    longitude: featuredCafe?.geometry?.location?.lng(),
-    googlePlaceID: featuredCafe?.place_id,
-  };
+  const validatedCafe =
+    featuredCafe && GooglePlacesAPIValidator.parse(featuredCafe);
 
   if (typeof window !== "undefined") {
     window.initService = initService;
@@ -58,29 +53,12 @@ export const FeaturedCafe = () => {
         }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
-          <span className="text-gray-500 sm:text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </span>
-        </div>
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center"></div>
         <input
           id="pac-input"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="block w-full rounded-md border border-gray-300 p-1 py-2 pl-10 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="block w-full rounded-md border border-gray-300 p-1 py-2 pl-4 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           type="text"
           placeholder="Enter a location"
         />
@@ -98,20 +76,12 @@ export const FeaturedCafe = () => {
                 alt={"image"}
                 className="aspect-square h-full w-full rounded-l-md object-cover"
               />
-              {/* <Image
-                                src={featuredCafe.photos[0].getUrl({ maxWidth: featuredCafe.photos[0].width, maxHeight: featuredCafe.photos[0].height })}
-                                alt={"image"}
-                                className="rounded-l-md h-full w-full aspect-video object-cover"
-                                height={40}
-                                width={40}
-                                layout={'responsive'}
-                            /> */}
             </div>
           )}
           <div className="flex w-4/6 flex-col justify-between gap-y-4 bg-white px-3 pb-2 pt-6 text-left">
             <div>
               <p className="truncate font-bold">{featuredCafe.name}</p>
-              <p className="text-xs text-gray-500">No reviews yet!</p>
+              {/* TODO show cafes reviews here */}
             </div>
             <div className="flex gap-x-2">
               <button
@@ -130,10 +100,10 @@ export const FeaturedCafe = () => {
           </div>
         </div>
       )}
-      {dialogOpen && (
+      {dialogOpen && validatedCafe && (
         <RatingModal
           handleDialog={handleDialog}
-          cafe={newCafe}
+          cafe={validatedCafe}
           // setFeaturedCafe={setFeaturedCafe}
           // setOpen={setOpen}
         />
