@@ -7,10 +7,10 @@ export default async function handle(
 ) {
   const testing = await prisma.cafe.upsert({
     where: {
-      googlePlaceID: req.body.googlePlaceID,
+      place_id: req.body.place_id,
     },
     create: {
-      googlePlaceID: req.body.googlePlaceID,
+      place_id: req.body.place_id,
       latitude: req.body.latitude,
       longitude: req.body.longitude,
       name: req.body.name,
