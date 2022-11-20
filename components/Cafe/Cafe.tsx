@@ -1,7 +1,6 @@
-import { Review } from "@prisma/client";
 import { useState } from "react";
 import { RatingModal } from "../../components";
-import { CafeProps } from "./Cafe.types";
+import { CafeProps, Review } from "./Cafe.types";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   const [dialogOpen, setDialogOpen] = useState(false);

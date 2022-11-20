@@ -3,8 +3,9 @@ import Script from "next/script";
 import { useState } from "react";
 import { RatingModal } from "..";
 import dynamic from "next/dynamic";
-import Image from "next/image";
-
+import { GooglePlacesAPIValidator } from "./Cafe.types";
+import { XIcon } from "@heroicons/react/solid";
+import Dropdown from "../DropdownMenu/DropdownMenu";
 declare global {
   interface Window {
     initService: () => void;
@@ -18,7 +19,7 @@ const ToastComp = dynamic(() => import("../../utils/Toast"), {
 
 // TODO convert to TypeScript
 export const FeaturedCafe = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState<string | undefined>("");
   const [featuredCafe, setFeaturedCafe] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,16 +34,11 @@ export const FeaturedCafe = () => {
     const autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener("place_changed", () => {
       setFeaturedCafe(autocomplete.getPlace());
-      setInputValue("");
+      setInputValue(autocomplete.getPlace().name);
     });
   }
-  // TODO: Parse Google API response with Zod?
-  const newCafe = {
-    name: featuredCafe?.name,
-    latitude: featuredCafe?.geometry?.location?.lat(),
-    longitude: featuredCafe?.geometry?.location?.lng(),
-    googlePlaceID: featuredCafe?.place_id,
-  };
+  const validatedCafe =
+    featuredCafe && GooglePlacesAPIValidator.parse(featuredCafe);
 
   if (typeof window !== "undefined") {
     window.initService = initService;
@@ -58,29 +54,20 @@ export const FeaturedCafe = () => {
         }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
-          <span className="text-gray-500 sm:text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </span>
-        </div>
+        <button
+          onClick={() => {
+            setInputValue("");
+            setFeaturedCafe(null);
+          }}
+          className=" absolute inset-y-0 right-4 flex items-center"
+        >
+          <XIcon className="h-4 w-4" />
+        </button>
         <input
           id="pac-input"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="block w-full rounded-md border border-gray-300 p-1 py-2 pl-10 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="block w-full rounded-md border border-gray-300 p-1 py-2 pl-4 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           type="text"
           placeholder="Enter a location"
         />
@@ -98,42 +85,33 @@ export const FeaturedCafe = () => {
                 alt={"image"}
                 className="aspect-square h-full w-full rounded-l-md object-cover"
               />
-              {/* <Image
-                                src={featuredCafe.photos[0].getUrl({ maxWidth: featuredCafe.photos[0].width, maxHeight: featuredCafe.photos[0].height })}
-                                alt={"image"}
-                                className="rounded-l-md h-full w-full aspect-video object-cover"
-                                height={40}
-                                width={40}
-                                layout={'responsive'}
-                            /> */}
             </div>
           )}
-          <div className="flex w-4/6 flex-col justify-between gap-y-4 bg-white px-3 pb-2 pt-6 text-left">
-            <div>
-              <p className="truncate font-bold">{featuredCafe.name}</p>
-              <p className="text-xs text-gray-500">No reviews yet!</p>
-            </div>
-            <div className="flex gap-x-2">
-              <button
-                onClick={() => setDialogOpen(true)}
-                className="flex-1 rounded-md border border-emerald-500 bg-emerald-500 py-1.5 px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-emerald-600"
-              >
-                Rate
-              </button>
-              <button
-                onClick={() => setFeaturedCafe(null)}
-                className="flex-1 rounded-md border border-red-600 bg-red-600 py-1.5  px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-red-700"
-              >
-                Cancel
-              </button>
-            </div>
+          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-4 text-left">
+            {/* <DotsVerticalIcon className="absolute top-0 right-0 m-3 h-4 w-4" /> */}
+            {/* TODO add popover here add cafe to favourites, share etc.*/}
+            <Dropdown />
+            <p className="truncate font-bold ">{featuredCafe.name}</p>
+            {/* TODO show cafes reviews here */}
+            <p className="">5/5 - 3 reviews</p>
+            <button
+              onClick={() => setDialogOpen(true)}
+              className="rounded-md border border-emerald-600  py-1.5            
+              px-3 text-sm font-bold text-emerald-600 transition-colors duration-300 hover:bg-emerald-50 "
+            >
+              Rate
+            </button>
           </div>
         </div>
       )}
-      {dialogOpen && (
+      {dialogOpen && validatedCafe && (
         <RatingModal
           handleDialog={handleDialog}
-          cafe={newCafe}
+          cafe={{
+            ...validatedCafe,
+            latitude: validatedCafe?.geometry.location.lat(),
+            longitude: validatedCafe?.geometry.location.lng(),
+          }}
           // setFeaturedCafe={setFeaturedCafe}
           // setOpen={setOpen}
         />

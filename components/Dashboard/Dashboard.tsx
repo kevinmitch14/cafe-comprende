@@ -13,15 +13,15 @@ export const Dashboard = () => {
           src="https://cdn.shopify.com/s/files/1/0299/2046/0884/files/SyraCoffee_-_CoffeeThunderboltLogoBlac-Espacio_600x_1_1024x1024.png?v=1624869379"
           alt="logo"
           style={css}
-          width={30}
-          height={32}
+          width={40}
+          height={44}
           priority={true}
         />
-        <h1 className="text-xl font-bold text-gray-700 md:text-3xl">
+        <h1 className="text-xl font-extrabold uppercase text-gray-700 md:text-3xl">
           Café Comprende
         </h1>
-        <p className="hidden text-xl font-light text-gray-500 md:block">
-          Pick a cafe, rate it!
+        <p className="text-md mt-2 hidden font-bold uppercase tracking-tighter text-gray-500 md:block">
+          Find a cafe to suit your needs.
         </p>
       </div>
       <div className="relative flex flex-col justify-center px-4 md:px-0">
