@@ -6,7 +6,7 @@ export default async function handle(
   res: NextApiResponse
 ) {
   const { body } = req;
-  const { latitude, longitude, name, googlePlaceID } = body;
+  const { latitude, longitude, name, place_id } = body;
 
   await prisma.account.update({
     // TODO Match to user ID in future
@@ -18,10 +18,10 @@ export default async function handle(
           Cafe: {
             connectOrCreate: {
               where: {
-                googlePlaceID: googlePlaceID,
+                googlePlaceID: place_id,
               },
               create: {
-                googlePlaceID: googlePlaceID,
+                googlePlaceID: place_id,
                 latitude: latitude,
                 longitude: longitude,
                 name: name,

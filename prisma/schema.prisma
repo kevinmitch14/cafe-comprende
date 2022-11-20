@@ -25,10 +25,10 @@ model Cafe {
 
 model Review {
   id        Int     @id @default(autoincrement())
-  Cafe      Cafe    @relation(fields: [placeID], references: [googlePlaceID])
+  Cafe      Cafe    @relation(fields: [place_id], references: [googlePlaceID])
   Account   Account @relation(fields: [accountId], references: [id])
   accountId Int
-  placeID   String
+  place_id  String
   rating    Int
 }
 
