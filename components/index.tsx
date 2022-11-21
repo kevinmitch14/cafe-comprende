@@ -5,5 +5,6 @@ export * from "./Map/MapComponent";
 export * from "./Map/MarkerPopup";
 export * from "./List/CafeList";
 export * from "./List/MobileList";
+export * from "./Modal/RateExistingCafeModal";
+export * from "./Modal/RateFeaturedCafeModal";
 export * from "./Modal/CafeDetailsModal";
-export * from "./Modal/RatingModal";

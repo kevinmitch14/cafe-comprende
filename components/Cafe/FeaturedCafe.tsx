@@ -1,16 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Script from "next/script";
 import { useState } from "react";
-import { RatingModal } from "..";
+import { RateFeaturedCafeModal } from "../index";
 import dynamic from "next/dynamic";
 import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
 import Dropdown from "../DropdownMenu/DropdownMenu";
-declare global {
-  interface Window {
-    initService: () => void;
-  }
-}
 
 const ToastComp = dynamic(() => import("../../utils/Toast"), {
   ssr: false,
@@ -23,10 +18,17 @@ export const FeaturedCafe = () => {
   const [featuredCafe, setFeaturedCafe] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const handleDialog = () => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
   };
+
+  const handleSubmitReview = () => {
+    featuredCafe && setFeaturedCafe(null);
+    setInputValue("");
+  };
+
+  const handleInputCancel = handleSubmitReview;
 
   function initService() {
     const options = { types: ["cafe"] };
@@ -54,15 +56,14 @@ export const FeaturedCafe = () => {
         }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
-        <button
-          onClick={() => {
-            setInputValue("");
-            setFeaturedCafe(null);
-          }}
-          className=" absolute inset-y-0 right-4 flex items-center"
-        >
-          <XIcon className="h-4 w-4" />
-        </button>
+        {inputValue !== "" && (
+          <button
+            onClick={() => handleInputCancel()}
+            className=" absolute inset-y-0 right-4 flex items-center"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
+        )}
         <input
           id="pac-input"
           value={inputValue}
@@ -74,7 +75,7 @@ export const FeaturedCafe = () => {
       </div>
 
       {featuredCafe && (
-        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 shadow-sm hover:cursor-pointer hover:bg-gray-50">
+        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 bg-red-500 shadow-sm hover:bg-gray-50">
           {featuredCafe.photos && (
             <div className="w-2/6">
               <img
@@ -87,16 +88,17 @@ export const FeaturedCafe = () => {
               />
             </div>
           )}
-          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-4 text-left">
-            {/* <DotsVerticalIcon className="absolute top-0 right-0 m-3 h-4 w-4" /> */}
-            {/* TODO add popover here add cafe to favourites, share etc.*/}
+          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-2 pl-4 pt-4 text-left md:justify-between">
+            {/* TODO add functionality to popover.*/}
             <Dropdown />
-            <p className="truncate font-bold ">{featuredCafe.name}</p>
+            <p className="truncate font-bold uppercase md:text-lg">
+              {featuredCafe.name}
+            </p>
             {/* TODO show cafes reviews here */}
             <p className="">5/5 - 3 reviews</p>
             <button
               onClick={() => setDialogOpen(true)}
-              className="rounded-md border border-emerald-600  py-1.5            
+              className="rounded-md border border-emerald-600  py-1.5 
               px-3 text-sm font-bold text-emerald-600 transition-colors duration-300 hover:bg-emerald-50 "
             >
               Rate
@@ -105,15 +107,14 @@ export const FeaturedCafe = () => {
         </div>
       )}
       {dialogOpen && validatedCafe && (
-        <RatingModal
+        <RateFeaturedCafeModal
           handleDialog={handleDialog}
+          handleSubmitReview={handleSubmitReview}
           cafe={{
             ...validatedCafe,
             latitude: validatedCafe?.geometry.location.lat(),
             longitude: validatedCafe?.geometry.location.lng(),
           }}
-          // setFeaturedCafe={setFeaturedCafe}
-          // setOpen={setOpen}
         />
       )}
       {/* TODO fix toast comp */}
