@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
 import Dropdown from "../DropdownMenu/DropdownMenu";
+
 declare global {
   interface Window {
     initService: () => void;
@@ -23,9 +24,13 @@ export const FeaturedCafe = () => {
   const [featuredCafe, setFeaturedCafe] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const handleDialog = () => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
+  };
+
+  const handleSubmitReview = () => {
+    setFeaturedCafe(null);
   };
 
   function initService() {
@@ -107,6 +112,7 @@ export const FeaturedCafe = () => {
       {dialogOpen && validatedCafe && (
         <RatingModal
           handleDialog={handleDialog}
+          handleSubmitReview={handleSubmitReview}
           cafe={{
             ...validatedCafe,
             latitude: validatedCafe?.geometry.location.lat(),

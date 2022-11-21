@@ -10,6 +10,7 @@ import { LoadingSpinner } from "../../utils/LoadingSpinner";
 type RatingModalProps = {
   cafe: CafeDTO;
   handleDialog: () => void;
+  handleSubmitReview: () => void;
 };
 
 const FeatureButton = ({ text }: { text: string }) => {
@@ -28,7 +29,11 @@ const FeatureButton = ({ text }: { text: string }) => {
   );
 };
 
-export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
+export const RatingModal = ({
+  cafe,
+  handleDialog,
+  handleSubmitReview,
+}: RatingModalProps) => {
   const [rating, setRating] = useState<number>(0);
   const queryClient = useQueryClient();
 
@@ -43,6 +48,7 @@ export const RatingModal = ({ cafe, handleDialog }: RatingModalProps) => {
       onSettled: () => {
         queryClient.invalidateQueries(["cafes"]);
         handleDialog();
+        handleSubmitReview();
       },
     }
   );
