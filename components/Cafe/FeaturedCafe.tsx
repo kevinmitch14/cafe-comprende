@@ -75,7 +75,7 @@ export const FeaturedCafe = () => {
       </div>
 
       {featuredCafe && (
-        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 shadow-sm hover:cursor-pointer hover:bg-gray-50">
+        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 bg-red-500 shadow-sm hover:bg-gray-50">
           {featuredCafe.photos && (
             <div className="w-2/6">
               <img
@@ -88,15 +88,17 @@ export const FeaturedCafe = () => {
               />
             </div>
           )}
-          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-4 text-left">
+          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-2 pl-4 pt-4 text-left md:justify-between">
             {/* TODO add functionality to popover.*/}
             <Dropdown />
-            <p className="truncate font-bold ">{featuredCafe.name}</p>
+            <p className="truncate font-bold uppercase md:text-lg">
+              {featuredCafe.name}
+            </p>
             {/* TODO show cafes reviews here */}
             <p className="">5/5 - 3 reviews</p>
             <button
               onClick={() => setDialogOpen(true)}
-              className="rounded-md border border-emerald-600  py-1.5            
+              className="rounded-md border border-emerald-600  py-1.5 
               px-3 text-sm font-bold text-emerald-600 transition-colors duration-300 hover:bg-emerald-50 "
             >
               Rate
