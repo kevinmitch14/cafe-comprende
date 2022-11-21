@@ -29,7 +29,7 @@ const FeatureButton = ({ text }: { text: string }) => {
   );
 };
 
-export const RatingModal = ({
+export const RateFeaturedCafeModal = ({
   cafe,
   handleDialog,
   handleSubmitReview,

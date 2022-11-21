@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RatingModal } from "../../components";
+import { RateExistingCafeModal } from "../Modal/RateExistingCafeModal";
 import { CafeProps, Review } from "./Cafe.types";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
@@ -37,7 +37,9 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
           Rate
         </button>
       </div>
-      {dialogOpen && <RatingModal handleDialog={handleDialog} cafe={cafe} />}
+      {dialogOpen && (
+        <RateExistingCafeModal handleDialog={handleDialog} cafe={cafe} />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Script from "next/script";
 import { useState } from "react";
-import { RatingModal } from "..";
+import { RateFeaturedCafeModal } from "../index";
 import dynamic from "next/dynamic";
 import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
@@ -24,8 +24,11 @@ export const FeaturedCafe = () => {
   };
 
   const handleSubmitReview = () => {
-    setFeaturedCafe(null);
+    featuredCafe && setFeaturedCafe(null);
+    setInputValue("");
   };
+
+  const handleInputCancel = handleSubmitReview;
 
   function initService() {
     const options = { types: ["cafe"] };
@@ -53,15 +56,14 @@ export const FeaturedCafe = () => {
         }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
-        <button
-          onClick={() => {
-            setInputValue("");
-            setFeaturedCafe(null);
-          }}
-          className=" absolute inset-y-0 right-4 flex items-center"
-        >
-          <XIcon className="h-4 w-4" />
-        </button>
+        {inputValue !== "" && (
+          <button
+            onClick={() => handleInputCancel()}
+            className=" absolute inset-y-0 right-4 flex items-center"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
+        )}
         <input
           id="pac-input"
           value={inputValue}
@@ -103,7 +105,7 @@ export const FeaturedCafe = () => {
         </div>
       )}
       {dialogOpen && validatedCafe && (
-        <RatingModal
+        <RateFeaturedCafeModal
           handleDialog={handleDialog}
           handleSubmitReview={handleSubmitReview}
           cafe={{
