@@ -75,7 +75,7 @@ export const FeaturedCafe = () => {
       </div>
 
       {featuredCafe && (
-        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 bg-red-500 shadow-sm hover:bg-gray-50">
+        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 shadow-sm hover:bg-gray-50">
           {featuredCafe.photos && (
             <div className="w-2/6">
               <img
