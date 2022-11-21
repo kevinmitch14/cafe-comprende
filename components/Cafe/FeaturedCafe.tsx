@@ -7,12 +7,6 @@ import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
 import Dropdown from "../DropdownMenu/DropdownMenu";
 
-declare global {
-  interface Window {
-    initService: () => void;
-  }
-}
-
 const ToastComp = dynamic(() => import("../../utils/Toast"), {
   ssr: false,
   // ignore dangerous hydration
@@ -93,8 +87,7 @@ export const FeaturedCafe = () => {
             </div>
           )}
           <div className="relative flex w-4/6 flex-col gap-2 bg-white p-4 text-left">
-            {/* <DotsVerticalIcon className="absolute top-0 right-0 m-3 h-4 w-4" /> */}
-            {/* TODO add popover here add cafe to favourites, share etc.*/}
+            {/* TODO add functionality to popover.*/}
             <Dropdown />
             <p className="truncate font-bold ">{featuredCafe.name}</p>
             {/* TODO show cafes reviews here */}
@@ -118,8 +111,6 @@ export const FeaturedCafe = () => {
             latitude: validatedCafe?.geometry.location.lat(),
             longitude: validatedCafe?.geometry.location.lng(),
           }}
-          // setFeaturedCafe={setFeaturedCafe}
-          // setOpen={setOpen}
         />
       )}
       {/* TODO fix toast comp */}
