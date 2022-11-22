@@ -55,7 +55,10 @@ export const RateExistingCafeModal = ({
                 {cafe.name}
               </Dialog.Title>
               <div className="mt-2 ">
-                <div className="flex justify-center gap-x-1 text-sm">
+                <div
+                  className="flex justify-center gap-x-1 text-sm"
+                  tabIndex={0}
+                >
                   {[1, 2, 3, 4, 5].map((number) => {
                     return (
                       <button
