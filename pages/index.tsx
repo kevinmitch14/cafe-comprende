@@ -4,7 +4,6 @@ import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 
 export default function Home() {
-  console.log("Hello World");
   const { height, width } = useWindowSize();
   return (
     <main
