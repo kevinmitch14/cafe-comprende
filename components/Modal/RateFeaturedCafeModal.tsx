@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
-import { LoadingDots } from "../../utils/LoadingDots";
+import { LoadingDots } from "../shared/LoadingDots";
 
 type RatingModalProps = {
   cafe: CafeDTO;

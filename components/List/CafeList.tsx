@@ -1,6 +1,6 @@
 import { Cafe } from "..";
 import { useCafes } from "../../hooks/useCafes";
-import { LoadingSpinner } from "../../utils/LoadingSpinner";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 export const CafeList = () => {
   const { isLoading, isError, error, data } = useCafes();

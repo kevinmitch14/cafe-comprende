@@ -6,7 +6,7 @@ import { INITIAL_VIEW_STATE } from "../../utils/constants";
 import { CafeProps } from "../Cafe/Cafe.types";
 import Markers from "./Markers";
 import { useCafes } from "../../hooks/useCafes";
-import { LoadingSpinner } from "../../utils/LoadingSpinner";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 export const MapComponent = () => {
   const [cafe, setCafe] = useState<CafeProps | null>(null);
