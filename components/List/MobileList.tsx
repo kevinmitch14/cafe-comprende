@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { Cafe } from "../../components";
 import { useCafes } from "../../hooks/useCafes";
-import { LoadingSpinner } from "../shared/LoadingSpinner";
+import { LoadingSpinner } from "../../utils/LoadingSpinner";
 import { ChevronDoubleUpIcon, XCircleIcon } from "@heroicons/react/solid";
 
 export const MobileList = () => {

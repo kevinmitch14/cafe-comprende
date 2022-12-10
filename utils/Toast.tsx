@@ -1,7 +1,7 @@
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import * as Portal from "@radix-ui/react-portal";
 import { Dispatch, SetStateAction } from "react";
-import { CafeProps } from "../Cafe/Cafe.types";
+import { CafeProps } from "../components/Cafe/Cafe.types";
 
 type ToastProps = {
   open: boolean;
