@@ -7,7 +7,7 @@ import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
 import Dropdown from "../DropdownMenu/DropdownMenu";
 
-const ToastComp = dynamic(() => import("../shared/Toast"), {
+const ToastComp = dynamic(() => import("../../utils/Toast"), {
   ssr: false,
   // ignore dangerous hydration
 });
@@ -49,10 +49,11 @@ export const FeaturedCafe = () => {
   return (
     <div className="px-2 md:px-4">
       <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NODE_ENV == "development"
+        src={`https://maps.googleapis.com/maps/api/js?key=${
+          process.env.NODE_ENV == "development"
             ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
             : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-          }&callback=initService&libraries=places`}
+        }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
         {inputValue !== "" && (
