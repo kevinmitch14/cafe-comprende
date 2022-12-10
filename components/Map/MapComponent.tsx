@@ -6,7 +6,7 @@ import { INITIAL_VIEW_STATE } from "../../utils/constants";
 import { CafeProps } from "../Cafe/Cafe.types";
 import Markers from "./Markers";
 import { useCafes } from "../../hooks/useCafes";
-import { LoadingSpinner } from "../../utils/LoadingSpinner";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 export const MapComponent = () => {
   const [cafe, setCafe] = useState<CafeProps | null>(null);
@@ -28,9 +28,9 @@ export const MapComponent = () => {
     return <div className="h-full w-full">Error ${error.message}</div>;
   if (isLoading)
     return (
+      // TODO revisit
       <div className="flex h-full w-full items-center justify-center">
-        {/* TODO add props to size the loading spinner? */}
-        {isLoading && <LoadingSpinner />}
+        <LoadingSpinner />
       </div>
     );
   return (
