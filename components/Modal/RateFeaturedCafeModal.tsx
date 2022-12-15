@@ -79,8 +79,10 @@ export const RateFeaturedCafeModal = ({
                   {[1, 2, 3, 4, 5].map((number) => {
                     return (
                       <button
-                        key={`rating-button ${number}`}
-                        className="bold rounded-lg border p-1 px-4 transition-[focus] duration-500 hover:bg-gray-100 focus:bg-emerald-600 focus:text-white"
+                        key={`rating-button-${number}`}
+                        data-state={number === rating && 'active'}
+                        type="button"
+                        className="bold rounded-lg border p-1 px-4 hover:bg-gray-100 data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                         onClick={() => setRating(number)}
                         value={number}
                       >
@@ -101,7 +103,8 @@ export const RateFeaturedCafeModal = ({
           <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
             <button
               type="button"
-              className="inline-flex w-full min-w-[80px] items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+              disabled={rating === 0}
+              className="inline-flex w-full min-w-[80px] items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:hover:cursor-not-allowed"
               onClick={() => {
                 addCafeFromList.mutate({ ...newCafe, rating });
               }}
