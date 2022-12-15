@@ -93,7 +93,9 @@ export const RateExistingCafeModal = ({
               }}
             >
               {addCafeFromList.isLoading ? (
-                <LoadingDots variant="light" />
+                <div className="h-6 w-6 flex items-center">
+                  <LoadingDots variant="light" />
+                </div>
               ) : (
                 "Submit"
               )}
