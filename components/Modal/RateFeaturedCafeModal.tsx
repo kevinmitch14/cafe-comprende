@@ -80,7 +80,7 @@ export const RateFeaturedCafeModal = ({
                     return (
                       <button
                         key={`rating-button-${number}`}
-                        data-state={rating === number && 'active'}
+                        data-state={number === rating && 'active'}
                         type="button"
                         className="bold rounded-lg border p-1 px-4 hover:bg-gray-100 data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                         onClick={() => setRating(number)}
