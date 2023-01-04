@@ -16,7 +16,7 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   };
 
   return (
-    <div className="flex flex-col items-start px-2 py-2">
+    <div className="flex flex-col gap-1.5 items-start p-4 rounded-lg shadow-sm border mb-2">
       <h3 className="text-lg font-bold">{cafe.name}</h3>
       <p>
         Rating:{" "}
