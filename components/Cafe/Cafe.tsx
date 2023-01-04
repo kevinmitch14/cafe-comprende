@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RateExistingCafeModal } from "../Modal/RateExistingCafeModal";
 import { CafeProps, Review } from "./Cafe.types";
+import Dropdown from "../DropdownMenu/DropdownMenu";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -16,7 +17,8 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   };
 
   return (
-    <div className="flex flex-col items-start px-2 py-2">
+    <div className="flex flex-col relative gap-1.5 items-start p-4 rounded-lg shadow-sm border mb-2">
+      <Dropdown placeId={cafe.place_id} />
       <h3 className="text-lg font-bold">{cafe.name}</h3>
       <p>
         Rating:{" "}

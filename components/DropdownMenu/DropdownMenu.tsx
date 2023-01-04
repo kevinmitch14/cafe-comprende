@@ -1,4 +1,3 @@
-import React, { ReactNode } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   BookmarkIcon,
@@ -6,49 +5,56 @@ import {
   MapIcon,
   ShareIcon,
 } from "@heroicons/react/outline";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Profile } from "../../hooks/useProfile";
+import { CafeProps } from "../Cafe/Cafe.types";
 
-type DropdownItemProps = {
-  action: () => void;
-  icon: ReactNode;
-  text: string;
-};
 
 const shareCafe = () => {
   console.log("Share Cafe");
 };
-const bookmarkCafe = () => {
-  console.log("Bookmark Cafe");
+const bookmarkCafe = (place_id: string) => {
+  return axios.post('/api/addBookmark', { place_id: place_id })
 };
 
 const getDirectionsToCafe = () => {
   console.log("Get directions");
 };
 
-const listItems: DropdownItemProps[] = [
-  {
-    action: () => bookmarkCafe(),
-    icon: (
-      <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-110" />
-    ),
-    text: "Bookmark",
-  },
-  {
-    action: () => getDirectionsToCafe(),
-    icon: (
-      <MapIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-110" />
-    ),
-    text: "Directions",
-  },
-  {
-    action: () => shareCafe(),
-    icon: (
-      <ShareIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-110" />
-    ),
-    text: "Share",
-  },
-];
+const DropdownMenuDemo = ({ placeId }: { placeId: string }) => {
+  // TODO optimistic updates
+  const addBookmark = useMutation(
+    () => {
+      return axios.post("/api/addBookmark", { place_id: placeId });
+    },
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries(["profile"]);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["profile"]);
+      },
+    }
+  );
+  const removeBookmark = useMutation(
+    () => {
+      return axios.post("/api/removeBookmark", { place_id: placeId });
+    },
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries(["profile"]);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["profile"]);
+      },
+    }
+  );
 
-const DropdownMenuDemo = () => {
+  const queryClient = useQueryClient()
+  const data = queryClient.getQueryData(['profile']) as Profile
+  const isCafeBookmarked = data?.bookmarks?.some((item: CafeProps) => item.place_id === placeId);
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -66,22 +72,25 @@ const DropdownMenuDemo = () => {
           className="rounded-md border bg-white py-1 shadow-md"
           align="end"
         >
-          {listItems.map(({ text, action, icon }) => {
-            return (
-              <DropdownMenu.Item
-                key={text}
-                className="group mx-1 rounded px-3 py-1 hover:bg-blue-500 hover:text-white"
-              >
-                <button
-                  onClick={() => action}
-                  className="flex items-center gap-2"
-                >
-                  {icon}
-                  {text}
-                </button>
-              </DropdownMenu.Item>
-            );
-          })}
+          <DropdownMenu.Item
+            key={"Bookmark"}
+            className="group mx-1 rounded px-3 py-1 hover:bg-zinc-100"
+          >
+            <button
+              onClick={() => {
+                isCafeBookmarked ? removeBookmark.mutate() :
+                  addBookmark.mutate();
+              }}
+              className="flex items-center gap-2"
+            >
+              {isCafeBookmarked ?
+                <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                :
+                <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+              }
+              {isCafeBookmarked ? 'Remove Bookmark' : 'Add to Bookmarks'}
+            </button>
+          </DropdownMenu.Item>
           {/* <DropdownMenu.Separator className="m-1 h-[1px] bg-red-400"></DropdownMenu.Separator> */}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
