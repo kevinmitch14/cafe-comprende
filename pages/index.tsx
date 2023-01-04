@@ -1,10 +1,13 @@
 import Head from "next/head";
 import { Dashboard, MapComponent, MobileList } from "../components";
+import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 
 export default function Home() {
   const { height, width } = useWindowSize();
+  const { isLoading, isError, error, data } = useProfile();
+
   return (
     <main
       style={{ height: `${height}px` }}
