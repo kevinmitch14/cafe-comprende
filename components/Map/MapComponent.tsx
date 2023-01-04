@@ -6,7 +6,6 @@ import { INITIAL_VIEW_STATE } from "../../utils/constants";
 import { CafeProps } from "../Cafe/Cafe.types";
 import Markers from "./Markers";
 import { useCafes } from "../../hooks/useCafes";
-import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 export const MapComponent = () => {
   const [cafe, setCafe] = useState<CafeProps | null>(null);
@@ -18,21 +17,12 @@ export const MapComponent = () => {
     setCafe(null);
   };
 
-  const { isLoading, isError, error, data } = useCafes();
+  const { data } = useCafes();
 
   const selectCafe = useCallback((selectedCafe: CafeProps) => {
     setCafe(selectedCafe);
   }, []);
 
-  if (isError)
-    return <div className="h-full w-full">Error ${error.message}</div>;
-  if (isLoading)
-    return (
-      // TODO revisit
-      <div className="flex h-full w-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
   return (
     <div className="h-full w-full">
       <Map
@@ -47,7 +37,7 @@ export const MapComponent = () => {
           fitBoundsOptions={{ maxZoom: 12 }}
         />
         <NavigationControl position="top-right" />
-        <Markers data={data} selectCafe={selectCafe} />
+        {data && <Markers data={data} selectCafe={selectCafe} />}
         {cafe && (
           <MarkerPopup cafe={cafe} handleCafeUnselect={handleCafeUnselect} />
         )}
