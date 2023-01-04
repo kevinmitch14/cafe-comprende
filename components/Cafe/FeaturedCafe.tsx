@@ -50,8 +50,8 @@ export const FeaturedCafe = () => {
     <div className="px-2 md:px-4">
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NODE_ENV == "development"
-            ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
-            : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+          ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
+          : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
           }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
@@ -89,7 +89,7 @@ export const FeaturedCafe = () => {
           )}
           <div className="relative flex w-4/6 flex-col gap-2 bg-white p-2 pl-4 pt-4 text-left md:justify-between">
             {/* TODO add functionality to popover.*/}
-            <Dropdown />
+            {/* <Dropdown /> */}
             <p className="truncate font-bold uppercase md:text-lg">
               {featuredCafe.name}
             </p>
