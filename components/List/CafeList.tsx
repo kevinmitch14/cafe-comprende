@@ -8,7 +8,7 @@ export const CafeList = () => {
   if (isLoading)
     return (
       <div className="mt-12">
-        <LoadingSpinner />
+        <LoadingSpinner size="base" />
       </div>
     );
   if (isError) {

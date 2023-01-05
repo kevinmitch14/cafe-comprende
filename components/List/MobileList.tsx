@@ -17,7 +17,7 @@ export const MobileList = () => {
   const { isLoading, isError, error, data } = useCafes();
 
   if (isError) return <span>An error has occurred: + {error.message}</span>;
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <LoadingSpinner size="base" />;
 
   return (
     <>
