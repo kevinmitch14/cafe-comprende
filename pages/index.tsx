@@ -4,6 +4,9 @@ import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 
+import { Inter } from '@next/font/google';
+const inter = Inter({ subsets: ['latin'] })
+
 export default function Home() {
   const { height, width } = useWindowSize();
   const { isLoading, isError, error, data } = useProfile();
@@ -11,7 +14,7 @@ export default function Home() {
   return (
     <main
       style={{ height: `${height}px` }}
-      className="flex flex-col md:flex-row"
+      className={`flex flex-col md:flex-row antialiased ${inter.className}`}
     >
       <Head>
         {process.env.NODE_ENV == "production" ? (
