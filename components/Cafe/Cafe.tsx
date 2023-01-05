@@ -17,9 +17,9 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   };
 
   return (
-    <div className="flex flex-col relative gap-1.5 items-start p-4 rounded-lg shadow-sm border mb-2">
+    <div className="flex flex-col relative gap-1.5 items-start p-4 rounded-lg shadow-sm border mb-3">
       <Dropdown placeId={cafe.place_id} />
-      <h3 className="text-lg font-bold">{cafe.name}</h3>
+      <h3 className="text-lg font-bold text-left w-11/12">{cafe.name}</h3>
       <p>
         Rating:{" "}
         {Number.isInteger(averageCafeRating)

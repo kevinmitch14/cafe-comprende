@@ -90,7 +90,7 @@ export const FeaturedCafe = () => {
           <div className="relative flex w-4/6 flex-col gap-2 bg-white p-2 pl-4 pt-4 text-left md:justify-between">
             {/* TODO add functionality to popover.*/}
             {/* <Dropdown /> */}
-            <p className="truncate font-bold uppercase md:text-lg">
+            <p className="font-bold md:text-lg">
               {featuredCafe.name}
             </p>
             {/* TODO show cafes reviews here */}

@@ -10,12 +10,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { CafeProps } from "../Cafe/Cafe.types";
 
-
+// TODO implement Share Cafe + Get directions to cafe.
 const shareCafe = () => {
   console.log("Share Cafe");
-};
-const bookmarkCafe = (place_id: string) => {
-  return axios.post('/api/addBookmark', { place_id: place_id })
 };
 
 const getDirectionsToCafe = () => {
