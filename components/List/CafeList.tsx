@@ -16,7 +16,7 @@ export const CafeList = () => {
   }
 
   return (
-    <div className="mt-4 w-full border-t p-2 bg-zinc-50">
+    <div className="mt-4 w-full border-t p-2 px-4 bg-zinc-50">
       {data.map((cafe, index) => {
         return <Cafe key={index} cafe={cafe} />;
       })}
