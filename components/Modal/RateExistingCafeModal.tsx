@@ -20,7 +20,7 @@ export const RateExistingCafeModal = ({
 
   const addCafeFromList = useMutation(
     (cafe: CafeDTO) => {
-      return axios.post("/api/createReview", cafe);
+      return axios.post("/api/addReview", cafe);
     },
     {
       onMutate: async () => {
