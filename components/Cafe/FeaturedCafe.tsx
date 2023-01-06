@@ -138,7 +138,7 @@ export const FeaturedCafe = () => {
             {/* TODO add functionality to popover.*/}
             {/* <Dropdown /> */}
             <h3 className="text-lg font-bold text-left w-11/12">{featuredCafe.name}</h3>
-            {isCafeRated ?
+            {isCafeRated && reviewCount > 0 ?
               <p className="text-sm font-medium">
                 Rating:{" "}
                 {Number.isInteger(averageRating)
