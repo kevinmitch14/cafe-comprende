@@ -9,7 +9,7 @@ import Dropdown from "../DropdownMenu/DropdownMenu";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
-import { notifyAddBookmark, notifyRemoveBookmark } from "../shared/Toasts";
+import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 
@@ -30,9 +30,14 @@ export const FeaturedCafe = () => {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
       },
+      onSuccess: () => {
+        notifyAddBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
-        notifyAddBookmark()
       },
     }
   );
@@ -47,9 +52,14 @@ export const FeaturedCafe = () => {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
       },
+      onSuccess: () => {
+        notifyRemoveBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
-        notifyRemoveBookmark()
       },
     }
   );

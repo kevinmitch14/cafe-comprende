@@ -7,35 +7,45 @@ import { Profile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
-import { notifyAddBookmark, notifyRemoveBookmark } from "../shared/Toasts";
+import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
 
   const addBookmark = useMutation(
     () => {
-      return axios.post("/api/addBookmark", { place_id: cafe.place_id });
+      return axios.post("/api/addBookmark", cafe);
     },
     {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
       },
+      onSuccess: () => {
+        notifyAddBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
-        notifyAddBookmark()
       },
     }
   );
   const removeBookmark = useMutation(
     () => {
-      return axios.post("/api/removeBookmark", { place_id: cafe.place_id });
+      return axios.post("/api/removeBookmark", cafe);
     },
     {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
       },
+      onSuccess: () => {
+        notifyRemoveBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
-        notifyRemoveBookmark()
       },
     }
   );
@@ -57,7 +67,7 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
 
   return (
     <div className="flex flex-col relative gap-2 items-start p-4 rounded-lg shadow-sm border mb-3">
-      <Dropdown placeId={cafe.place_id} />
+      <Dropdown cafe={cafe} />
       <h3 className="text-lg font-bold text-left w-11/12">{cafe.name}</h3>
       <p className="text-sm font-medium">
         Rating:{" "}
