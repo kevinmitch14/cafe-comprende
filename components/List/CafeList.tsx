@@ -8,7 +8,7 @@ export const CafeList = () => {
   if (isLoading)
     return (
       <div className="mt-12">
-        <LoadingSpinner />
+        <LoadingSpinner size="base" />
       </div>
     );
   if (isError) {
@@ -18,7 +18,9 @@ export const CafeList = () => {
   return (
     <div className="mt-4 w-full border-t p-2 px-4 bg-zinc-50">
       {data.map((cafe, index) => {
-        return <Cafe key={index} cafe={cafe} />;
+        if (cafe.reviews.length > 0) {
+          return <Cafe key={index} cafe={cafe} />;
+        }
       })}
     </div>
   );

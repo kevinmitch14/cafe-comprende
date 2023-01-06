@@ -10,8 +10,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
         data: {
             bookmarks: {
-                connect: {
-                    place_id: body.place_id
+                connectOrCreate: {
+                    where: {
+                        place_id: body.place_id
+                    },
+                    create: {
+                        place_id: req.body.place_id,
+                        latitude: req.body.latitude,
+                        longitude: req.body.longitude,
+                        name: req.body.name,
+                    }
                 }
             }
         }

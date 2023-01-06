@@ -5,6 +5,7 @@ import axios from "axios";
 import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 import { LoadingDots } from "../shared/LoadingDots";
+import { notifyAddCafe } from "../shared/Toasts";
 
 type RateExistingModalProps = {
   cafe: CafeDTO;
@@ -20,7 +21,7 @@ export const RateExistingCafeModal = ({
 
   const addCafeFromList = useMutation(
     (cafe: CafeDTO) => {
-      return axios.post("/api/createReview", cafe);
+      return axios.post("/api/addReview", cafe);
     },
     {
       onMutate: async () => {
@@ -29,6 +30,7 @@ export const RateExistingCafeModal = ({
       onSettled: () => {
         queryClient.invalidateQueries(["cafes"]);
         handleDialog();
+        notifyAddCafe()
       },
     }
   );

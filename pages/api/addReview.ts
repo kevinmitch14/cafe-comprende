@@ -5,7 +5,7 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const testing = await prisma.cafe.upsert({
+  const newReview = await prisma.cafe.upsert({
     where: {
       place_id: req.body.place_id,
     },
@@ -14,8 +14,19 @@ export default async function handle(
       latitude: req.body.latitude,
       longitude: req.body.longitude,
       name: req.body.name,
+      reviews: {
+        create: {
+          rating: req.body.rating,
+          Account: {
+            connect: {
+              id: 1
+            }
+          }
+        }
+      }
     },
     update: {
+      updatedAt: new Date(),
       reviews: {
         create: {
           rating: req.body.rating,
@@ -28,5 +39,5 @@ export default async function handle(
       },
     },
   });
-  res.json(testing);
+  res.json(newReview);
 }

@@ -1,32 +1,16 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 import { LoadingDots } from "../shared/LoadingDots";
+import { notifyAddCafe } from "../shared/Toasts";
 
 type RatingModalProps = {
   cafe: CafeDTO;
   handleDialog: () => void;
   handleSubmitReview: () => void;
-};
-
-const FeatureButton = ({ text }: { text: string }) => {
-  const [toggled, setToggled] = useState(false);
-  return (
-    <button
-      type="button"
-      className={`rounded border bg-gray-100 p-1 text-sm ${toggled && ""}`}
-      onClick={() => setToggled((prev) => !prev)}
-    >
-      <div className="flex items-center justify-center gap-1">
-        {text}{" "}
-        {toggled && <CheckCircleIcon className="h-4 w-4 text-emerald-600" />}
-      </div>
-    </button>
-  );
 };
 
 export const RateFeaturedCafeModal = ({
@@ -39,7 +23,7 @@ export const RateFeaturedCafeModal = ({
 
   const addCafeFromList = useMutation(
     (cafe: CafeDTO) => {
-      return axios.post("/api/createReview", cafe);
+      return axios.post("/api/addReview", cafe);
     },
     {
       onMutate: async () => {
@@ -47,6 +31,7 @@ export const RateFeaturedCafeModal = ({
       },
       onSettled: () => {
         queryClient.invalidateQueries(["cafes"]);
+        notifyAddCafe()
         handleDialog();
         handleSubmitReview();
       },
@@ -91,12 +76,6 @@ export const RateFeaturedCafeModal = ({
                     );
                   })}
                 </div>
-                {/* <div className="mt-4 flex space-x-2">
-                  <FeatureButton text="Price" />
-                  <FeatureButton text="Wifi" />
-                  <FeatureButton text="Coffee" />
-                  <FeatureButton text="Parking" />
-                </div> */}
               </div>
             </div>
           </div>

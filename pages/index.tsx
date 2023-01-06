@@ -5,6 +5,7 @@ import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 
 import { Inter } from '@next/font/google';
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -31,6 +32,10 @@ export default function Home() {
       <Dashboard />
       <MapComponent />
       {width < MOBILE_BREAKPOINT && <MobileList />}
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+      />
     </main>
   );
 }

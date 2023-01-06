@@ -2,22 +2,67 @@
 import Script from "next/script";
 import { useState } from "react";
 import { RateFeaturedCafeModal } from "../index";
-import dynamic from "next/dynamic";
-import { GooglePlacesAPIValidator } from "./Cafe.types";
+import { CafeProps, GooglePlacesAPIValidator, Review } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
+// TODO fix this, bookmark cafe that is not rated.
 import Dropdown from "../DropdownMenu/DropdownMenu";
+import { BookmarkIcon } from "@heroicons/react/outline";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Profile } from "../../hooks/useProfile";
+import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
+import axios from "axios";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
-const ToastComp = dynamic(() => import("../shared/Toast"), {
-  ssr: false,
-  // ignore dangerous hydration
-});
-
-// TODO convert to TypeScript
 export const FeaturedCafe = () => {
   const [inputValue, setInputValue] = useState<string | undefined>("");
   const [featuredCafe, setFeaturedCafe] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const addBookmark = useMutation(
+    () => {
+      return axios.post("/api/addBookmark", {
+        ...validatedCafe, latitude: validatedCafe?.geometry.location.lat(),
+        longitude: validatedCafe?.geometry.location.lng(),
+      });
+    },
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries(["profile"]);
+      },
+      onSuccess: () => {
+        notifyAddBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["profile"]);
+      },
+    }
+  );
+  const removeBookmark = useMutation(
+    () => {
+      return axios.post("/api/removeBookmark", {
+        ...validatedCafe, latitude: validatedCafe?.geometry.location.lat(),
+        longitude: validatedCafe?.geometry.location.lng(),
+      });
+    },
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries(["profile"]);
+      },
+      onSuccess: () => {
+        notifyRemoveBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["profile"]);
+      },
+    }
+  );
 
   const handleDialog = () => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
@@ -45,6 +90,17 @@ export const FeaturedCafe = () => {
   if (typeof window !== "undefined") {
     window.initService = initService;
   }
+  const queryClient = useQueryClient()
+  const cafeData = queryClient.getQueryData(["cafes"]) as CafeProps[]
+  const isCafeRated = cafeData && cafeData.find((item: CafeProps) => item.place_id === validatedCafe?.place_id)
+  const reviewCount = isCafeRated !== undefined && isCafeRated.reviews.length
+  const averageRating = isCafeRated !== undefined ? isCafeRated.reviews.reduce(
+    (prev: number, current: Review) => prev + current.rating,
+    0
+  ) : 0;
+
+  const profileData = queryClient.getQueryData(['profile']) as Profile
+  const isCafeBookmarked = profileData?.bookmarks?.some((item: CafeProps) => item.place_id === validatedCafe?.place_id);
 
   return (
     <div className="px-2 md:px-4">
@@ -74,7 +130,8 @@ export const FeaturedCafe = () => {
       </div>
 
       {featuredCafe && (
-        <div className="mt-4 mb-2 flex h-auto overflow-hidden rounded-md border border-gray-200 shadow-sm hover:bg-gray-50">
+        <div className="mt-4 mb-2 flex overflow-hidden rounded-md border border-gray-200 shadow-sm hover:bg-gray-50">
+          {/* TODO fix image */}
           {featuredCafe.photos && (
             <div className="w-2/6">
               <img
@@ -87,21 +144,42 @@ export const FeaturedCafe = () => {
               />
             </div>
           )}
-          <div className="relative flex w-4/6 flex-col gap-2 bg-white p-2 pl-4 pt-4 text-left md:justify-between">
+          <div className="relative flex w-4/6 flex-col gap-2 bg-white py-3 px-3 text-left">
             {/* TODO add functionality to popover.*/}
             {/* <Dropdown /> */}
-            <p className="font-bold md:text-lg">
-              {featuredCafe.name}
-            </p>
-            {/* TODO show cafes reviews here */}
-            <p className="">5/5 - 3 reviews</p>
-            <button
-              onClick={() => setDialogOpen(true)}
-              className="rounded-md border border-emerald-600  py-1.5 
-              px-3 text-sm font-bold text-emerald-600 transition-colors duration-300 hover:bg-emerald-50 "
-            >
-              Rate
-            </button>
+            <h3 className="text-lg font-bold text-left w-11/12">{featuredCafe.name}</h3>
+            {isCafeRated && reviewCount > 0 ?
+              <p className="text-sm font-medium">
+                Rating:{" "}
+                {Number.isInteger(averageRating)
+                  ? 4
+                  : averageRating.toFixed(1)}
+                /5
+                <span className="pl-1 text-sm text-gray-500">
+                  ({reviewCount}{" "}
+                  {reviewCount > 1 ? "reviews" : "review"})
+                </span>
+              </p>
+              : <p className="text-sm font-medium">Not rated yet</p>}
+            <div className="flex gap-x-2 mt-1">
+              <button
+                className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                onClick={() => setDialogOpen(true)}
+              >
+                Rate
+              </button>
+              <button
+                className="mt-3 flex items-center gap-1 w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                onClick={() => isCafeBookmarked ? removeBookmark.mutate() :
+                  addBookmark.mutate()}
+              >
+                {addBookmark.isLoading || removeBookmark.isLoading ? <LoadingSpinner size="small" /> : isCafeBookmarked ?
+                  <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                  :
+                  <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                }
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -116,8 +194,6 @@ export const FeaturedCafe = () => {
           }}
         />
       )}
-      {/* TODO fix toast comp */}
-      {/* {open && <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />} */}
     </div>
   );
 };

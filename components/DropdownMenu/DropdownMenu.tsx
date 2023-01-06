@@ -9,6 +9,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { CafeProps } from "../Cafe/Cafe.types";
+import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
 
 // TODO implement Share Cafe + Get directions to cafe.
 const shareCafe = () => {
@@ -19,15 +20,22 @@ const getDirectionsToCafe = () => {
   console.log("Get directions");
 };
 
-const DropdownMenuDemo = ({ placeId }: { placeId: string }) => {
+const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
   // TODO optimistic updates
+  console.log(cafe);
   const addBookmark = useMutation(
     () => {
-      return axios.post("/api/addBookmark", { place_id: placeId });
+      return axios.post("/api/addBookmark", cafe);
     },
     {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
+      },
+      onSuccess: () => {
+        notifyAddBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -36,11 +44,17 @@ const DropdownMenuDemo = ({ placeId }: { placeId: string }) => {
   );
   const removeBookmark = useMutation(
     () => {
-      return axios.post("/api/removeBookmark", { place_id: placeId });
+      return axios.post("/api/removeBookmark", cafe);
     },
     {
       onMutate: async () => {
         await queryClient.cancelQueries(["profile"]);
+      },
+      onSuccess: () => {
+        notifyRemoveBookmark()
+      },
+      onError: (error: Error) => {
+        notifyError(error.message)
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -50,7 +64,7 @@ const DropdownMenuDemo = ({ placeId }: { placeId: string }) => {
 
   const queryClient = useQueryClient()
   const data = queryClient.getQueryData(['profile']) as Profile
-  const isCafeBookmarked = data?.bookmarks?.some((item: CafeProps) => item.place_id === placeId);
+  const isCafeBookmarked = data?.bookmarks?.some((item: CafeProps) => item.place_id === cafe.place_id);
 
   return (
     <DropdownMenu.Root>
