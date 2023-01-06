@@ -2,17 +2,11 @@
 import Script from "next/script";
 import { useState } from "react";
 import { RateFeaturedCafeModal } from "../index";
-import dynamic from "next/dynamic";
 import { GooglePlacesAPIValidator } from "./Cafe.types";
 import { XIcon } from "@heroicons/react/solid";
+// TODO fix this, bookmark cafe that is not rated.
 import Dropdown from "../DropdownMenu/DropdownMenu";
 
-const ToastComp = dynamic(() => import("../shared/Toast"), {
-  ssr: false,
-  // ignore dangerous hydration
-});
-
-// TODO convert to TypeScript
 export const FeaturedCafe = () => {
   const [inputValue, setInputValue] = useState<string | undefined>("");
   const [featuredCafe, setFeaturedCafe] =
@@ -116,8 +110,6 @@ export const FeaturedCafe = () => {
           }}
         />
       )}
-      {/* TODO fix toast comp */}
-      {/* {open && <ToastComp open={true} setOpen={setOpen} cafe={newCafe} />} */}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import axios from "axios";
 import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 import { LoadingDots } from "../shared/LoadingDots";
+import { notifyAddCafe } from "../shared/Toasts";
 
 type RateExistingModalProps = {
   cafe: CafeDTO;
@@ -29,6 +30,7 @@ export const RateExistingCafeModal = ({
       onSettled: () => {
         queryClient.invalidateQueries(["cafes"]);
         handleDialog();
+        notifyAddCafe()
       },
     }
   );

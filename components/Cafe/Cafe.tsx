@@ -7,6 +7,7 @@ import { Profile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
+import { notifyAddBookmark, notifyRemoveBookmark } from "../shared/Toasts";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
 
@@ -20,6 +21,7 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
+        notifyAddBookmark()
       },
     }
   );
@@ -33,6 +35,7 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
+        notifyRemoveBookmark()
       },
     }
   );
@@ -83,7 +86,6 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
             <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
             :
             <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />}
-          {/* {isCafeBookmarked ? 'Remove bookmark' : 'Bookmark'} */}
         </button>
       </div>
       {dialogOpen && (
