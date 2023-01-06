@@ -9,7 +9,11 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { CafeProps } from "../Cafe/Cafe.types";
-import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
+import {
+  notifyAddBookmark,
+  notifyError,
+  notifyRemoveBookmark,
+} from "../shared/Toasts";
 
 // TODO implement Share Cafe + Get directions to cafe.
 const shareCafe = () => {
@@ -32,10 +36,10 @@ const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyAddBookmark()
+        notifyAddBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -51,10 +55,10 @@ const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyRemoveBookmark()
+        notifyRemoveBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -62,9 +66,11 @@ const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
     }
   );
 
-  const queryClient = useQueryClient()
-  const data = queryClient.getQueryData(['profile']) as Profile
-  const isCafeBookmarked = data?.bookmarks?.some((item: CafeProps) => item.place_id === cafe.place_id);
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData(["profile"]) as Profile;
+  const isCafeBookmarked = data?.bookmarks?.some(
+    (item: CafeProps) => item.place_id === cafe.place_id
+  );
 
   return (
     <DropdownMenu.Root>
@@ -89,17 +95,18 @@ const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
           >
             <button
               onClick={() => {
-                isCafeBookmarked ? removeBookmark.mutate() :
-                  addBookmark.mutate();
+                isCafeBookmarked
+                  ? removeBookmark.mutate()
+                  : addBookmark.mutate();
               }}
               className="flex items-center gap-2"
             >
-              {isCafeBookmarked ?
-                <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
-                :
+              {isCafeBookmarked ? (
+                <BookmarkIcon className="h-4 w-4 fill-blue-500 stroke-blue-500 transition-transform delay-[25ms] group-hover:scale-105" />
+              ) : (
                 <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
-              }
-              {isCafeBookmarked ? 'Remove Bookmark' : 'Add to Bookmarks'}
+              )}
+              {isCafeBookmarked ? "Remove Bookmark" : "Add to Bookmarks"}
             </button>
           </DropdownMenu.Item>
           {/* <DropdownMenu.Separator className="m-1 h-[1px] bg-red-400"></DropdownMenu.Separator> */}

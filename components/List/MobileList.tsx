@@ -22,7 +22,7 @@ export const MobileList = () => {
   return (
     <>
       <label
-        className="z-10 -mt-10 flex items-center rounded-t-2xl bg-zinc-50 border-b border-zinc-200 py-3 pl-2 text-blue-500 md:hidden"
+        className="z-10 -mt-10 flex items-center rounded-t-2xl border-b border-zinc-200 bg-zinc-50 py-3 pl-2 text-blue-500 md:hidden"
         htmlFor="list"
       >
         {checked ? (
@@ -44,7 +44,7 @@ export const MobileList = () => {
         ref={cancelButtonRef}
         onChange={(e) => handleCheck(e)}
       ></input>
-      <div className="hidden h-0 w-full divide-y divide-solid overflow-y-auto peer-checked:block peer-checked:h-auto md:block p-2">
+      <div className="hidden h-0 w-full divide-y divide-solid overflow-y-auto p-4 peer-checked:block peer-checked:h-auto md:block md:p-2">
         {data.map((cafe, index) => {
           if (cafe.reviews.length > 0) {
             return <Cafe key={index} cafe={cafe} />;

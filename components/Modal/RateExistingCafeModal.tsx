@@ -30,7 +30,7 @@ export const RateExistingCafeModal = ({
       onSettled: () => {
         queryClient.invalidateQueries(["cafes"]);
         handleDialog();
-        notifyAddCafe()
+        notifyAddCafe();
       },
     }
   );
@@ -65,7 +65,7 @@ export const RateExistingCafeModal = ({
                     return (
                       <button
                         key={`rating-button-${number}`}
-                        data-state={number === rating && 'active'}
+                        data-state={number === rating && "active"}
                         type="button"
                         className="bold rounded-lg border p-1 px-4 hover:bg-gray-100 data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                         onClick={() => setRating(number)}
@@ -89,13 +89,13 @@ export const RateExistingCafeModal = ({
             <button
               type="button"
               disabled={rating === 0}
-              className="inline-flex w-full min-w-[80px] items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:hover:cursor-not-allowed"
+              className="inline-flex w-full min-w-[80px] items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:hover:cursor-not-allowed sm:ml-3 sm:w-auto sm:text-sm"
               onClick={() => {
                 addCafeFromList.mutate({ ...newCafe, rating });
               }}
             >
               {addCafeFromList.isLoading ? (
-                <div className="h-6 w-6 flex items-center">
+                <div className="flex h-6 w-6 items-center">
                   <LoadingDots variant="light" />
                 </div>
               ) : (

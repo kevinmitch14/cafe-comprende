@@ -7,10 +7,13 @@ import { Profile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
-import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
+import {
+  notifyAddBookmark,
+  notifyError,
+  notifyRemoveBookmark,
+} from "../shared/Toasts";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
-
   const addBookmark = useMutation(
     () => {
       return axios.post("/api/addBookmark", cafe);
@@ -20,10 +23,10 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyAddBookmark()
+        notifyAddBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -39,10 +42,10 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyRemoveBookmark()
+        notifyRemoveBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -61,14 +64,18 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
   };
 
-  const queryClient = useQueryClient()
-  const data = queryClient.getQueryData(['profile']) as Profile
-  const isCafeBookmarked = data?.bookmarks?.some((item: CafeProps) => item.place_id === cafe.place_id);
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData(["profile"]) as Profile;
+  const isCafeBookmarked = data?.bookmarks?.some(
+    (item: CafeProps) => item.place_id === cafe.place_id
+  );
 
   return (
-    <div className="flex flex-col relative gap-2 items-start p-4 rounded-lg shadow-sm border mb-3">
+    <div className="relative mb-3 flex flex-col items-start gap-1 rounded-lg border p-2.5 shadow-sm md:gap-2 md:p-3">
       <Dropdown cafe={cafe} />
-      <h3 className="text-lg font-bold text-left w-11/12">{cafe.name}</h3>
+      <h3 className="w-11/12 text-left text-base font-bold md:text-lg">
+        {cafe.name}
+      </h3>
       <p className="text-sm font-medium">
         Rating:{" "}
         {Number.isInteger(averageCafeRating)
@@ -80,22 +87,26 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
           {numberOfCafeReviews > 1 ? "reviews" : "review"})
         </span>
       </p>
-      <div className="flex gap-x-2 mt-1">
+      <div className="mt-1 flex gap-x-2">
         <button
-          className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+          className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
           onClick={handleDialog}
         >
           Rate
         </button>
         <button
-          className="mt-3 flex items-center gap-1 w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-          onClick={() => isCafeBookmarked ? removeBookmark.mutate() :
-            addBookmark.mutate()}
+          className="inline-flex items-center justify-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
+          onClick={() =>
+            isCafeBookmarked ? removeBookmark.mutate() : addBookmark.mutate()
+          }
         >
-          {addBookmark.isLoading || removeBookmark.isLoading ? <LoadingSpinner size="small" /> : isCafeBookmarked ?
-            <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
-            :
-            <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />}
+          {addBookmark.isLoading || removeBookmark.isLoading ? (
+            <LoadingSpinner size="small" />
+          ) : isCafeBookmarked ? (
+            <BookmarkIcon className="h-4 w-4 fill-blue-500 stroke-blue-500 transition-transform delay-[25ms] group-hover:scale-105" />
+          ) : (
+            <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+          )}
         </button>
       </div>
       {dialogOpen && (

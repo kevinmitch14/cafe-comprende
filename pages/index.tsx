@@ -4,9 +4,9 @@ import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 
-import { Inter } from '@next/font/google';
+import { Inter } from "@next/font/google";
 import { Toaster } from "react-hot-toast";
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { height, width } = useWindowSize();
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <main
       style={{ height: `${height}px` }}
-      className={`flex flex-col md:flex-row antialiased ${inter.className}`}
+      className={`flex flex-col antialiased md:flex-row ${inter.className}`}
     >
       <Head>
         {process.env.NODE_ENV == "production" ? (
@@ -32,10 +32,7 @@ export default function Home() {
       <Dashboard />
       <MapComponent />
       {width < MOBILE_BREAKPOINT && <MobileList />}
-      <Toaster
-        position="bottom-center"
-        reverseOrder={false}
-      />
+      <Toaster position="bottom-center" reverseOrder={false} />
     </main>
   );
 }

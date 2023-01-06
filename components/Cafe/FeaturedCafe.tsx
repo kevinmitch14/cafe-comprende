@@ -9,7 +9,11 @@ import Dropdown from "../DropdownMenu/DropdownMenu";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
-import { notifyAddBookmark, notifyError, notifyRemoveBookmark } from "../shared/Toasts";
+import {
+  notifyAddBookmark,
+  notifyError,
+  notifyRemoveBookmark,
+} from "../shared/Toasts";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 
@@ -22,7 +26,8 @@ export const FeaturedCafe = () => {
   const addBookmark = useMutation(
     () => {
       return axios.post("/api/addBookmark", {
-        ...validatedCafe, latitude: validatedCafe?.geometry.location.lat(),
+        ...validatedCafe,
+        latitude: validatedCafe?.geometry.location.lat(),
         longitude: validatedCafe?.geometry.location.lng(),
       });
     },
@@ -31,10 +36,10 @@ export const FeaturedCafe = () => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyAddBookmark()
+        notifyAddBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -44,7 +49,8 @@ export const FeaturedCafe = () => {
   const removeBookmark = useMutation(
     () => {
       return axios.post("/api/removeBookmark", {
-        ...validatedCafe, latitude: validatedCafe?.geometry.location.lat(),
+        ...validatedCafe,
+        latitude: validatedCafe?.geometry.location.lat(),
         longitude: validatedCafe?.geometry.location.lng(),
       });
     },
@@ -53,10 +59,10 @@ export const FeaturedCafe = () => {
         await queryClient.cancelQueries(["profile"]);
       },
       onSuccess: () => {
-        notifyRemoveBookmark()
+        notifyRemoveBookmark();
       },
       onError: (error: Error) => {
-        notifyError(error.message)
+        notifyError(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries(["profile"]);
@@ -90,25 +96,35 @@ export const FeaturedCafe = () => {
   if (typeof window !== "undefined") {
     window.initService = initService;
   }
-  const queryClient = useQueryClient()
-  const cafeData = queryClient.getQueryData(["cafes"]) as CafeProps[]
-  const isCafeRated = cafeData && cafeData.find((item: CafeProps) => item.place_id === validatedCafe?.place_id)
-  const reviewCount = isCafeRated !== undefined && isCafeRated.reviews.length
-  const averageRating = isCafeRated !== undefined ? isCafeRated.reviews.reduce(
-    (prev: number, current: Review) => prev + current.rating,
-    0
-  ) : 0;
+  const queryClient = useQueryClient();
+  const cafeData = queryClient.getQueryData(["cafes"]) as CafeProps[];
+  const isCafeRated =
+    cafeData &&
+    cafeData.find(
+      (item: CafeProps) => item.place_id === validatedCafe?.place_id
+    );
+  const reviewCount = isCafeRated !== undefined && isCafeRated.reviews.length;
+  const averageRating =
+    isCafeRated !== undefined
+      ? isCafeRated.reviews.reduce(
+          (prev: number, current: Review) => prev + current.rating,
+          0
+        )
+      : 0;
 
-  const profileData = queryClient.getQueryData(['profile']) as Profile
-  const isCafeBookmarked = profileData?.bookmarks?.some((item: CafeProps) => item.place_id === validatedCafe?.place_id);
+  const profileData = queryClient.getQueryData(["profile"]) as Profile;
+  const isCafeBookmarked = profileData?.bookmarks?.some(
+    (item: CafeProps) => item.place_id === validatedCafe?.place_id
+  );
 
   return (
     <div className="px-2 md:px-4">
       <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NODE_ENV == "development"
-          ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
-          : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-          }&callback=initService&libraries=places`}
+        src={`https://maps.googleapis.com/maps/api/js?key=${
+          process.env.NODE_ENV == "development"
+            ? process.env.NEXT_PUBLIC_GOOGLE_API_LOCAL
+            : process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+        }&callback=initService&libraries=places`}
       />
       <div className="relative mt-1 w-full rounded-md shadow-sm md:self-center">
         {inputValue !== "" && (
@@ -144,40 +160,46 @@ export const FeaturedCafe = () => {
               />
             </div>
           )}
-          <div className="relative flex w-4/6 flex-col gap-2 bg-white py-3 px-3 text-left">
+          <div className="relative flex w-4/6 flex-col gap-1 bg-white p-2.5 text-left md:gap-2 md:p-3">
             {/* TODO add functionality to popover.*/}
             {/* <Dropdown /> */}
-            <h3 className="text-lg font-bold text-left w-11/12">{featuredCafe.name}</h3>
-            {isCafeRated && reviewCount > 0 ?
+            <h3 className="w-11/12 text-left text-base font-bold md:text-lg">
+              {featuredCafe.name}
+            </h3>
+            {isCafeRated && reviewCount > 0 ? (
               <p className="text-sm font-medium">
                 Rating:{" "}
-                {Number.isInteger(averageRating)
-                  ? 4
-                  : averageRating.toFixed(1)}
+                {Number.isInteger(averageRating) ? 4 : averageRating.toFixed(1)}
                 /5
                 <span className="pl-1 text-sm text-gray-500">
-                  ({reviewCount}{" "}
-                  {reviewCount > 1 ? "reviews" : "review"})
+                  ({reviewCount} {reviewCount > 1 ? "reviews" : "review"})
                 </span>
               </p>
-              : <p className="text-sm font-medium">Not rated yet</p>}
-            <div className="flex gap-x-2 mt-1">
+            ) : (
+              <p className="text-sm font-medium">Not rated yet</p>
+            )}
+            <div className="mt-1 flex gap-x-2">
               <button
-                className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
                 onClick={() => setDialogOpen(true)}
               >
                 Rate
               </button>
               <button
-                className="mt-3 flex items-center gap-1 w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                onClick={() => isCafeBookmarked ? removeBookmark.mutate() :
-                  addBookmark.mutate()}
-              >
-                {addBookmark.isLoading || removeBookmark.isLoading ? <LoadingSpinner size="small" /> : isCafeBookmarked ?
-                  <BookmarkIcon className="fill-blue-500 stroke-blue-500 h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
-                  :
-                  <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
+                onClick={() =>
+                  isCafeBookmarked
+                    ? removeBookmark.mutate()
+                    : addBookmark.mutate()
                 }
+              >
+                {addBookmark.isLoading || removeBookmark.isLoading ? (
+                  <LoadingSpinner size="small" />
+                ) : isCafeBookmarked ? (
+                  <BookmarkIcon className="h-4 w-4 fill-blue-500 stroke-blue-500 transition-transform delay-[25ms] group-hover:scale-105" />
+                ) : (
+                  <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                )}
               </button>
             </div>
           </div>

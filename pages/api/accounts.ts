@@ -7,11 +7,11 @@ export default async function handler(
 ) {
   const accounts = await prisma.account.findFirst({
     where: {
-      id: 1
+      id: 1,
     },
     include: {
       reviews: true,
-      bookmarks: true
+      bookmarks: true,
     },
   });
   res.json(accounts);

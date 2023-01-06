@@ -16,7 +16,7 @@ export const CafeList = () => {
   }
 
   return (
-    <div className="mt-4 w-full border-t p-2 px-4 bg-zinc-50">
+    <div className="mt-4 w-full border-t bg-zinc-50 p-2 px-4">
       {data.map((cafe, index) => {
         if (cafe.reviews.length > 0) {
           return <Cafe key={index} cafe={cafe} />;

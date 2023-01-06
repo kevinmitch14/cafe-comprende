@@ -19,11 +19,11 @@ export default async function handle(
           rating: req.body.rating,
           Account: {
             connect: {
-              id: 1
-            }
-          }
-        }
-      }
+              id: 1,
+            },
+          },
+        },
+      },
     },
     update: {
       updatedAt: new Date(),
