@@ -46,7 +46,9 @@ export const MobileList = () => {
       ></input>
       <div className="hidden h-0 w-full divide-y divide-solid overflow-y-auto peer-checked:block peer-checked:h-auto md:block p-2">
         {data.map((cafe, index) => {
-          return <Cafe key={index} cafe={cafe} />;
+          if (cafe.reviews.length > 0) {
+            return <Cafe key={index} cafe={cafe} />;
+          }
         })}
       </div>
     </>
