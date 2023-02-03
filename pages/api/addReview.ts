@@ -17,9 +17,9 @@ export default async function handle(
       reviews: {
         create: {
           rating: req.body.rating,
-          Account: {
+          account: {
             connect: {
-              id: 1,
+              email: 'kevinmitch14@gmail.com',
             },
           },
         },
@@ -30,9 +30,9 @@ export default async function handle(
       reviews: {
         create: {
           rating: req.body.rating,
-          Account: {
+          account: {
             connect: {
-              id: 1,
+              email: 'kevinmitch14@gmail.com',
             },
           },
         },

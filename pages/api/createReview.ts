@@ -8,14 +8,14 @@ export default async function handle(
   const { body } = req;
   const { latitude, longitude, name, place_id } = body;
 
-  await prisma.account.update({
+  await prisma.user.update({
     // TODO Match to user ID in future
-    where: { id: 1 },
+    where: { email: 'kevinmitch14@gmail.com' },
     data: {
       reviews: {
         create: {
           rating: body.rating,
-          Cafe: {
+          cafe: {
             connectOrCreate: {
               where: {
                 place_id: place_id,
@@ -32,7 +32,7 @@ export default async function handle(
       },
     },
   });
-  const accounts = await prisma.account.findMany({
+  const accounts = await prisma.user.findMany({
     include: {
       reviews: true,
     },

@@ -3,14 +3,20 @@ import { Dashboard, MapComponent, MobileList } from "../components";
 import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
+import { useSession } from "next-auth/react";
 
 import { Inter } from "@next/font/google";
 import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { data: session } = useSession();
   const { height, width } = useWindowSize();
-  const { isLoading, isError, error, data } = useProfile();
+
+  const { isLoading, isError, error, data } = useProfile({
+    email: (session?.user?.email && session?.user?.email) as string,
+    enabled: !!session?.user?.email,
+  });
 
   return (
     <main

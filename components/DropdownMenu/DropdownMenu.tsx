@@ -26,7 +26,6 @@ const getDirectionsToCafe = () => {
 
 const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
   // TODO optimistic updates
-  console.log(cafe);
   const addBookmark = useMutation(
     () => {
       return axios.post("/api/addBookmark", cafe);

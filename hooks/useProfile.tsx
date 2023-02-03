@@ -9,12 +9,18 @@ export type Profile = {
   reviews: Review[];
 };
 
-export const useProfile = () => {
+export const useProfile = ({
+  email,
+  enabled = true,
+}: {
+  email: string;
+  enabled: boolean;
+}) => {
   return useQuery<Profile, Error>(
     ["profile"],
     async () => {
-      return axios.get("/api/accounts").then((res) => res.data);
+      return axios.get(`/api/accounts/${email}`).then((res) => res.data);
     },
-    { refetchOnWindowFocus: false }
+    { refetchOnWindowFocus: false, enabled: enabled }
   );
 };
