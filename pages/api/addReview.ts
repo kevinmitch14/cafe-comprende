@@ -7,19 +7,19 @@ export default async function handle(
 ) {
   const newReview = await prisma.cafe.upsert({
     where: {
-      place_id: req.body.place_id,
+      place_id: req.body.cafe.place_id,
     },
     create: {
-      place_id: req.body.place_id,
-      latitude: req.body.latitude,
-      longitude: req.body.longitude,
-      name: req.body.name,
+      place_id: req.body.cafe.place_id,
+      latitude: req.body.cafe.latitude,
+      longitude: req.body.cafe.longitude,
+      name: req.body.cafe.name,
       reviews: {
         create: {
-          rating: req.body.rating,
+          rating: req.body.cafe.rating,
           account: {
             connect: {
-              email: 'kevinmitch14@gmail.com',
+              email: req.body.email,
             },
           },
         },
@@ -29,15 +29,15 @@ export default async function handle(
       updatedAt: new Date(),
       reviews: {
         create: {
-          rating: req.body.rating,
+          rating: req.body.cafe.rating,
           account: {
             connect: {
-              email: 'kevinmitch14@gmail.com',
+              email: req.body.email,
             },
           },
         },
       },
     },
   });
-  res.json(newReview);
+  res.status(200).json(newReview);
 }

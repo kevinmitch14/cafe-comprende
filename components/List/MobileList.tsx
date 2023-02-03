@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import { Cafe } from "../../components";
 import { useCafes } from "../../hooks/useCafes";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
-import { ChevronDoubleUpIcon, XCircleIcon } from "@heroicons/react/solid";
+import { ChevronDoubleUpIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 export const MobileList = () => {
   const cancelButtonRef = useRef(null);
