@@ -6,6 +6,7 @@ import { CafeDTO } from "../Cafe/Cafe.types";
 import { ModalLayout } from "./ModalLayout";
 import { LoadingDots } from "../shared/LoadingDots";
 import { notifyAddCafe } from "../shared/Toasts";
+import { useSession } from "next-auth/react";
 
 type RatingModalProps = {
   cafe: CafeDTO;
@@ -20,10 +21,14 @@ export const RateFeaturedCafeModal = ({
 }: RatingModalProps) => {
   const [rating, setRating] = useState<number>(0);
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
 
   const addCafeFromList = useMutation(
     (cafe: CafeDTO) => {
-      return axios.post("/api/addReview", cafe);
+      return axios.post("/api/addReview", {
+        cafe,
+        email: session?.user?.email,
+      });
     },
     {
       onMutate: async () => {
