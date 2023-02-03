@@ -12,8 +12,11 @@ import {
   notifyError,
   notifyRemoveBookmark,
 } from "../shared/Toasts";
+import { useSession } from "next-auth/react";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
+  const { data: session } = useSession();
+
   const addBookmark = useMutation(
     () => {
       return axios.post("/api/addBookmark", cafe);
@@ -95,6 +98,7 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
           Rate
         </button>
         <button
+          disabled={!session}
           className="inline-flex items-center justify-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
           onClick={() =>
             isCafeBookmarked ? removeBookmark.mutate() : addBookmark.mutate()
