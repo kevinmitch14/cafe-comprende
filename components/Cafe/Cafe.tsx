@@ -4,7 +4,7 @@ import { CafeProps, Review } from "./Cafe.types";
 import Dropdown from "../DropdownMenu/DropdownMenu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
-import { BookmarkIcon } from "@heroicons/react/outline";
+import { BookmarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import {

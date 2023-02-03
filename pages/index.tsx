@@ -4,10 +4,7 @@ import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 import { useSession } from "next-auth/react";
-
-import { Inter } from "@next/font/google";
 import { Toaster } from "react-hot-toast";
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session } = useSession();
@@ -21,7 +18,7 @@ export default function Home() {
   return (
     <main
       style={{ height: `${height}px` }}
-      className={`flex flex-col antialiased md:flex-row ${inter.className}`}
+      className={`flex flex-col antialiased md:flex-row`}
     >
       <Head>
         {process.env.NODE_ENV == "production" ? (

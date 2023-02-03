@@ -3,10 +3,9 @@ import Script from "next/script";
 import { useState } from "react";
 import { RateFeaturedCafeModal } from "../index";
 import { CafeProps, GooglePlacesAPIValidator, Review } from "./Cafe.types";
-import { XIcon } from "@heroicons/react/solid";
 // TODO fix this, bookmark cafe that is not rated.
 import Dropdown from "../DropdownMenu/DropdownMenu";
-import { BookmarkIcon } from "@heroicons/react/outline";
+import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import {
@@ -118,7 +117,7 @@ export const FeaturedCafe = () => {
   );
 
   return (
-    <div className="px-2 md:px-4">
+    <>
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${
           process.env.NODE_ENV == "development"
@@ -132,7 +131,7 @@ export const FeaturedCafe = () => {
             onClick={() => handleInputCancel()}
             className=" absolute inset-y-0 right-4 flex items-center"
           >
-            <XIcon className="h-4 w-4" />
+            <XMarkIcon className="h-4 w-4" />
           </button>
         )}
         <input
@@ -186,7 +185,7 @@ export const FeaturedCafe = () => {
                 Rate
               </button>
               <button
-                className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
+                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
                 onClick={() =>
                   isCafeBookmarked
                     ? removeBookmark.mutate()
@@ -216,7 +215,7 @@ export const FeaturedCafe = () => {
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,10 +1,10 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   BookmarkIcon,
-  DotsVerticalIcon,
+  EllipsisVerticalIcon,
   MapIcon,
   ShareIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
@@ -78,7 +78,7 @@ const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
           className="absolute top-0 right-0 m-3"
           aria-label="Customise options"
         >
-          <DotsVerticalIcon className="h-4 w-4" />
+          <EllipsisVerticalIcon className="h-4 w-4" />
         </button>
       </DropdownMenu.Trigger>
 
