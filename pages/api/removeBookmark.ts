@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   const { body } = req;
   console.log(body);
-  const result = await prisma.account.update({
+  const result = await prisma.user.update({
     where: {
-      id: 1,
+      email: 'kevinmitch14@gmail.com',
     },
     data: {
       bookmarks: {
