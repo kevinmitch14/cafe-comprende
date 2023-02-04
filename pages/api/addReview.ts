@@ -32,7 +32,7 @@ export default async function handle(
           rating: req.body.cafe.rating,
           account: {
             connect: {
-              email: req.body.email,
+              email: "kevinmitch14@gmail.com",
             },
           },
         },
