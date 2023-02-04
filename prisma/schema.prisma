@@ -21,22 +21,22 @@ model Cafe {
   // rating        Int
   updatedAt DateTime @updatedAt
   // bookmarkers Account[]
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  User      User?    @relation(fields: [email], references: [email])
+  email     String?
 
-  @@index([userId])
+  @@index([email])
 }
 
 model Review {
-  id        Int    @id @default(autoincrement())
-  cafe      Cafe   @relation(fields: [place_id], references: [place_id])
-  account   User   @relation(fields: [accountId], references: [id])
+  id       Int    @id @default(autoincrement())
+  cafe     Cafe   @relation(fields: [place_id], references: [place_id])
+  account  User   @relation(fields: [email], references: [email])
   // Account   Account @relation(fields: [accountId], references: [id])
-  accountId String
-  place_id  String
-  rating    Int
+  email    String
+  place_id String
+  rating   Int
 
-  @@index([accountId])
+  @@index([email])
   @@index([place_id])
 }
 
