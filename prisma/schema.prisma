@@ -12,19 +12,17 @@ datasource db {
 }
 
 model Cafe {
-  place_id  String   @id @unique
+  place_id    String   @id @unique
   // id            Int      @id @default(autoincrement())
-  reviews   Review[]
-  latitude  Decimal
-  longitude Decimal
-  name      String
+  reviews     Review[]
+  latitude    Decimal
+  longitude   Decimal
+  name        String
   // rating        Int
-  updatedAt DateTime @updatedAt
-  // bookmarkers Account[]
-  User      User?    @relation(fields: [email], references: [email])
-  email     String?
-
-  @@index([email])
+  updatedAt   DateTime @updatedAt
+  bookmarkers User[]
+  // User      User?    @relation(fields: [userId], references: [email])
+  // userId    String?
 }
 
 model Review {
