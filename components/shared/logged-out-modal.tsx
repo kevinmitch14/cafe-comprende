@@ -26,9 +26,7 @@ export default function LoggedOutModal({
     <Dialog open={dialogOpen && !session} onOpenChange={setDialogOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            You must be logged in to complete this action.
-          </DialogTitle>
+          <DialogTitle>You must be logged in</DialogTitle>
           <DialogDescription>
             Log in with one of the options below to continue.
             <div className="p-4 mt-2">
