@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import { useSession } from "next-auth/react";
+import LoggedOutModal from "../shared/logged-out-modal";
 
 export const FeaturedCafe = () => {
   const [inputValue, setInputValue] = useState<string | undefined>("");
@@ -182,33 +183,34 @@ export const FeaturedCafe = () => {
             )}
             <div className="mt-1 flex gap-x-2">
               <button
-                className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
+                className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto"
                 onClick={() => setDialogOpen(true)}
               >
                 Rate
               </button>
               <button
-                disabled={!session}
                 className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto md:text-base"
                 onClick={() =>
-                  isCafeBookmarked
-                    ? removeBookmark.mutate()
-                    : addBookmark.mutate()
+                  session
+                    ? isCafeBookmarked
+                      ? removeBookmark.mutate()
+                      : addBookmark.mutate()
+                    : setDialogOpen(true)
                 }
               >
                 {addBookmark.isLoading || removeBookmark.isLoading ? (
                   <LoadingSpinner size="small" />
                 ) : isCafeBookmarked ? (
-                  <BookmarkIcon className="h-4 w-4 fill-blue-500 stroke-blue-500 transition-transform delay-[25ms] group-hover:scale-105" />
+                  <BookmarkIcon className="h-4 w-4 fill-blue-500 stroke-blue-500 stroke-2 transition-transform delay-[25ms] group-hover:scale-105" />
                 ) : (
-                  <BookmarkIcon className="h-4 w-4 transition-transform delay-[25ms] group-hover:scale-105" />
+                  <BookmarkIcon className="h-4 w-4 stroke-2 transition-transform delay-[25ms] group-hover:scale-105" />
                 )}
               </button>
             </div>
           </div>
         </div>
       )}
-      {dialogOpen && validatedCafe && (
+      {dialogOpen && session && validatedCafe && (
         <RateFeaturedCafeModal
           handleDialog={handleDialog}
           handleSubmitReview={handleSubmitReview}
@@ -219,6 +221,11 @@ export const FeaturedCafe = () => {
           }}
         />
       )}
+      <LoggedOutModal
+        session={session}
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+      />
     </>
   );
 };
