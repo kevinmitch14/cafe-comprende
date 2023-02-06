@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export type Review = {
   id: number;
-  accountId: number;
-  placeID: string;
+  email: number;
+  place_id: string;
   rating: number;
 };
 
