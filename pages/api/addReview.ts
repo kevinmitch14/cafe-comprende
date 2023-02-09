@@ -19,7 +19,7 @@ export default async function handle(
           rating: req.body.rating,
           account: {
             connect: {
-              email: req.body.email,
+              email: "kevinmitch14@gmail.com",
             },
           },
         },
@@ -38,6 +38,6 @@ export default async function handle(
         },
       },
     },
-  });
+  }).then(() => res.revalidate('/'))
   res.status(200).json(newReview);
 }
