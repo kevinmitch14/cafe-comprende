@@ -15,8 +15,8 @@ model Cafe {
   place_id    String   @id @unique
   // id            Int      @id @default(autoincrement())
   reviews     Review[]
-  latitude    Decimal
-  longitude   Decimal
+  latitude    Float
+  longitude   Float
   name        String
   // rating        Int
   updatedAt   DateTime @updatedAt

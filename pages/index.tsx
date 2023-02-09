@@ -5,6 +5,33 @@ import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 import { useSession } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { prisma } from "../utils/prisma";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+
+export async function getStaticProps() {
+  const queryClient = new QueryClient();
+  await queryClient.fetchQuery(
+    ["cafes"],
+    async () =>
+      await prisma.cafe.findMany({
+        orderBy: {
+          updatedAt: "desc",
+        },
+        select: {
+          reviews: true,
+          latitude: true,
+          longitude: true,
+          place_id: true,
+          name: true,
+        },
+      })
+  );
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
 
 export default function Home() {
   const { data: session } = useSession();

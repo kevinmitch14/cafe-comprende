@@ -9,7 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowRightOnRectangleIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export const Dashboard = () => {
   const css = { maxWidth: "100%", height: "auto" };
@@ -44,14 +48,16 @@ export const Dashboard = () => {
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <Link href={`/profile/${session.user?.email}`}>
+                  <DropdownMenuItem>
+                    <UserIcon className="h-4 w-4 mr-2 stroke-2" />
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem onClick={() => signOut()}>
                   <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2 stroke-2" />
                   <span>Log Out</span>
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem>
-                  <UserIcon className="h-4 w-4 mr-2 stroke-2" />
-                  <Link href={"/profile/${id}"}>Profile</Link>
-                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
