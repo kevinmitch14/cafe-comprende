@@ -34,6 +34,7 @@ export default function Profile(
       <div>
         <h2 className="font-bold">Reviews</h2>
         {reviews.map((review: Review) => {
+
           return (
             <div key={review.id}>
               <p>Place ID: {review.place_id}</p>
@@ -72,6 +73,7 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
       },
     };
   }
+
   if (id === "jsmith@example.com") {
     return {
       props: {
@@ -117,6 +119,6 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
     props: {
       userAccount: account,
       userSession: session,
-    },
+    }
   };
 };
