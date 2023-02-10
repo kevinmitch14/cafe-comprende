@@ -33,7 +33,6 @@ export default function Profile(
       <div>
         <h2 className="font-bold">Reviews</h2>
         {reviews.map((review: Review) => {
-          console.log(review);
           return (
             <div key={review.id}>
               <p>Place ID: {review.place_id}</p>
@@ -73,30 +72,6 @@ export const getServerSideProps: GetServerSideProps<Profile> = async (
             email: "kevinmitch14@gmail.com",
             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
             rating: 4,
-          },
-          {
-            id: 7,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-            rating: 1,
-          },
-          {
-            id: 8,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJXUNrtUdxhlQRMWfiCLV27a0",
-            rating: 4,
-          },
-          {
-            id: 9,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJXUNrtUdxhlQRMWfiCLV27a0",
-            rating: 4,
-          },
-          {
-            id: 10,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJ98Er0TGRW0gReN0fnKQRzv0",
-            rating: 5,
           },
         ],
         bookmarks: [
