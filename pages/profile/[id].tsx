@@ -6,6 +6,8 @@ import {
 import { useRouter } from "next/router";
 import { CafeDTO, Review } from "../../components/Cafe/Cafe.types";
 import { prisma } from "../../utils/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export type Profile = {
   id: string;
@@ -22,18 +24,17 @@ export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const router = useRouter();
-  console.log(props);
   const { id } = router.query as {
     id: string;
   };
-  const { reviews, bookmarks } = props;
+  const { reviews, bookmarks } = props.userAccount;
 
   return (
     <div className="flex">
       <div>
         <h2 className="font-bold">Reviews</h2>
         {reviews.map((review: Review) => {
-          console.log(review);
+
           return (
             <div key={review.id}>
               <p>Place ID: {review.place_id}</p>
@@ -58,12 +59,21 @@ export default function Profile(
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Profile> = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const { id } = ctx.params as {
+export const getServerSideProps: GetServerSideProps<any> = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const { id } = context.params as {
     id: string;
   };
+  // redirect to home if there is no session
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: true,
+      },
+    };
+  }
+
   if (id === "jsmith@example.com") {
     return {
       props: {
@@ -73,30 +83,6 @@ export const getServerSideProps: GetServerSideProps<Profile> = async (
             email: "kevinmitch14@gmail.com",
             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
             rating: 4,
-          },
-          {
-            id: 7,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-            rating: 1,
-          },
-          {
-            id: 8,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJXUNrtUdxhlQRMWfiCLV27a0",
-            rating: 4,
-          },
-          {
-            id: 9,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJXUNrtUdxhlQRMWfiCLV27a0",
-            rating: 4,
-          },
-          {
-            id: 10,
-            email: "kevinmitch14@gmail.com",
-            place_id: "ChIJ98Er0TGRW0gReN0fnKQRzv0",
-            rating: 5,
           },
         ],
         bookmarks: [
@@ -121,7 +107,7 @@ export const getServerSideProps: GetServerSideProps<Profile> = async (
   const account = await prisma.user.findFirst({
     where: {
       email: {
-        equals: id,
+        equals: session.user?.email,
       },
     },
     include: {
@@ -130,6 +116,9 @@ export const getServerSideProps: GetServerSideProps<Profile> = async (
     },
   });
   return {
-    props: JSON.parse(JSON.stringify(account)),
+    props: {
+      userAccount: account,
+      userSession: session,
+    }
   };
 };
