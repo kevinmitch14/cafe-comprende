@@ -1,17 +1,26 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { CafeProps } from "../components/Cafe/Cafe.types";
 import {
   notifyAddBookmark,
   notifyError,
   notifyRemoveBookmark,
 } from "../components/shared/Toasts";
 
-export const bookmarkHandler = (cafe: CafeProps, action: "add" | "remove") => {
+export type BookmarkCafeDTO = {
+  name: string;
+  place_id: string;
+  latitude: number;
+  longitude: number;
+};
+
+export const bookmarkHandler = (
+  cafe: BookmarkCafeDTO,
+  action: "add" | "remove"
+) => {
   return axios.post(`/api/bookmarkHandler?action=${action}`, cafe);
 };
 
-export const useAddBookmark = (cafe: CafeProps) => {
+export const useAddBookmark = (cafe: BookmarkCafeDTO) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -31,7 +40,7 @@ export const useAddBookmark = (cafe: CafeProps) => {
   });
 };
 
-export const useRemoveBookmark = (cafe: CafeProps) => {
+export const useRemoveBookmark = (cafe: BookmarkCafeDTO) => {
   const queryClient = useQueryClient();
 
   return useMutation({
