@@ -2,62 +2,20 @@ import { useState } from "react";
 import { RateExistingCafeModal } from "../Modal/RateExistingCafeModal";
 import { CafeProps, Review } from "./Cafe.types";
 import Dropdown from "../DropdownMenu/DropdownMenu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
-import {
-  notifyAddBookmark,
-  notifyError,
-  notifyRemoveBookmark,
-} from "../shared/Toasts";
 import { useSession } from "next-auth/react";
 import LoggedOutModal from "../shared/logged-out-modal";
+import { useAddBookmark, useRemoveBookmark } from "../../hooks/useBoomark";
 
 export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
   const { data: session } = useSession();
+  const removeBookmark = useRemoveBookmark(cafe);
+  const addBookmark = useAddBookmark(cafe);
 
-  const addBookmark = useMutation(
-    () => {
-      return axios.post("/api/addBookmark", cafe);
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyAddBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
-  const removeBookmark = useMutation(
-    () => {
-      return axios.post("/api/removeBookmark", cafe);
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyRemoveBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
   const [dialogOpen, setDialogOpen] = useState(false);
-  // const [loggedOutAction, setLoggedOutAction] = useState(false);
   const accumCafeRating = cafe.reviews.reduce(
     (prev: number, current: Review) => prev + current.rating,
     0
