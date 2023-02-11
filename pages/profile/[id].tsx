@@ -1,9 +1,4 @@
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from "next";
-import { useRouter } from "next/router";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { CafeDTO, Review } from "../../components/Cafe/Cafe.types";
 import { prisma } from "../../utils/prisma";
 import { getServerSession } from "next-auth";
@@ -23,10 +18,6 @@ export type Bookmark = Omit<CafeDTO, "rating"> & { updatedAt: Date };
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  const router = useRouter();
-  const { id } = router.query as {
-    id: string;
-  };
   const { reviews, bookmarks } = props.userAccount;
   const hasReviews = reviews.length > 0;
   const hasBookmarks = bookmarks.length > 0;

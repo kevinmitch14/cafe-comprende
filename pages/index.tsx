@@ -2,7 +2,6 @@ import Head from "next/head";
 import { Dashboard, MapComponent, MobileList } from "../components";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
-import { useSession } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { prisma } from "../utils/prisma";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
@@ -33,7 +32,6 @@ export async function getStaticProps() {
 }
 
 export default function Home() {
-  const { data: session } = useSession();
   const { height, width } = useWindowSize();
 
   return (
