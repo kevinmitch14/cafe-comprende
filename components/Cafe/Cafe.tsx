@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { RateExistingCafeModal } from "../Modal/RateExistingCafeModal";
 import { CafeProps, Review } from "./Cafe.types";
-import { useQueryClient } from "@tanstack/react-query";
-import { Profile } from "../../hooks/useProfile";
+import { useProfile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import { useSession } from "next-auth/react";
@@ -26,9 +25,11 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
   };
 
-  const queryClient = useQueryClient();
-  const data = queryClient.getQueryData(["profile"]) as Profile;
-  const isCafeBookmarked = data?.bookmarks?.some(
+  const { data: profileData } = useProfile({
+    email: (session?.user?.email && session?.user?.email) as string,
+    enabled: !!session?.user?.email,
+  });
+  const isCafeBookmarked = profileData?.bookmarks?.some(
     (item: CafeProps) => item.place_id === cafe.place_id
   );
 
