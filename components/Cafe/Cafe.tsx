@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { RateExistingCafeModal } from "../Modal/RateExistingCafeModal";
 import { CafeProps, Review } from "./Cafe.types";
-import Dropdown from "../DropdownMenu/DropdownMenu";
 import { useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
@@ -35,7 +34,6 @@ export const Cafe = ({ cafe }: { cafe: CafeProps }) => {
 
   return (
     <div className="relative mb-3 flex flex-col items-start gap-1 rounded-lg border p-2.5 shadow-sm md:gap-2 md:p-3">
-      <Dropdown cafe={cafe} />
       <h3 className="w-11/12 text-left text-base font-bold md:text-lg">
         {cafe.name}
       </h3>
