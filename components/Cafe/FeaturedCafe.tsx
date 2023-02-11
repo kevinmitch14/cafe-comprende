@@ -4,7 +4,6 @@ import { useState } from "react";
 import { RateFeaturedCafeModal } from "../index";
 import { CafeProps, GooglePlacesAPIValidator, Review } from "./Cafe.types";
 // TODO fix this, bookmark cafe that is not rated.
-import Dropdown from "../DropdownMenu/DropdownMenu";
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
