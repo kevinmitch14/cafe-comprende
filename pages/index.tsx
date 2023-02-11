@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Dashboard, MapComponent, MobileList } from "../components";
-import { useProfile } from "../hooks/useProfile";
 import useWindowSize from "../hooks/useWindowSize";
 import { MOBILE_BREAKPOINT } from "../utils/constants";
 import { useSession } from "next-auth/react";
@@ -36,11 +35,6 @@ export async function getStaticProps() {
 export default function Home() {
   const { data: session } = useSession();
   const { height, width } = useWindowSize();
-
-  const { isLoading, isError, error, data } = useProfile({
-    email: (session?.user?.email && session?.user?.email) as string,
-    enabled: !!session?.user?.email,
-  });
 
   return (
     <main

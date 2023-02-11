@@ -6,7 +6,7 @@ import { CafeProps, GooglePlacesAPIValidator, Review } from "./Cafe.types";
 // TODO fix this, bookmark cafe that is not rated.
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
-import { Profile } from "../../hooks/useProfile";
+import { useProfile } from "../../hooks/useProfile";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import { useSession } from "next-auth/react";
 import LoggedOutModal from "../shared/logged-out-modal";
@@ -72,7 +72,10 @@ export const FeaturedCafe = () => {
         )
       : 0;
 
-  const profileData = queryClient.getQueryData(["profile"]) as Profile;
+  const { data: profileData } = useProfile({
+    email: (session?.user?.email && session?.user?.email) as string,
+    enabled: !!session?.user?.email,
+  });
   const isCafeBookmarked = profileData?.bookmarks?.some(
     (item: CafeProps) => item.place_id === validatedCafe?.place_id
   );
