@@ -28,7 +28,7 @@ export const FeaturedCafe = () => {
 
   const addBookmark = useMutation(
     () => {
-      return axios.post("/api/addBookmark", {
+      return axios.post("/api/bookmarkHandler?action=add", {
         ...validatedCafe,
         latitude: validatedCafe?.geometry.location.lat(),
         longitude: validatedCafe?.geometry.location.lng(),
@@ -51,7 +51,7 @@ export const FeaturedCafe = () => {
   );
   const removeBookmark = useMutation(
     () => {
-      return axios.post("/api/removeBookmark", {
+      return axios.post("/api/bookmarkHandler?action=remove", {
         ...validatedCafe,
         latitude: validatedCafe?.geometry.location.lat(),
         longitude: validatedCafe?.geometry.location.lng(),
