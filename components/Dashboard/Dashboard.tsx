@@ -14,6 +14,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { notifyError, notifySignedOut } from "../shared/Toasts";
 
 export const Dashboard = () => {
   const css = { maxWidth: "100%", height: "auto" };
@@ -54,7 +55,13 @@ export const Dashboard = () => {
                     Profile
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    signOut({ redirect: false })
+                      .then(() => notifySignedOut())
+                      .catch((error: Error) => notifyError(error.message))
+                  }
+                >
                   <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2 stroke-2" />
                   <span>Log Out</span>
                 </DropdownMenuItem>
@@ -64,7 +71,11 @@ export const Dashboard = () => {
         ) : (
           <button
             className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0"
-            onClick={() => signIn("google")}
+            onClick={() =>
+              signIn("google").catch((error: Error) => {
+                notifyError(error.message);
+              })
+            }
           >
             Sign In
           </button>
