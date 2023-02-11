@@ -108,9 +108,14 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
         equals: session.user?.email,
       },
     },
-    include: {
+    select: {
       reviews: true,
-      bookmarks: true,
+      bookmarks: {
+        select: {
+          place_id: true,
+          name: true,
+        },
+      },
     },
   });
   return {
