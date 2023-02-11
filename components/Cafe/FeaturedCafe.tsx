@@ -6,72 +6,32 @@ import { CafeProps, GooglePlacesAPIValidator, Review } from "./Cafe.types";
 // TODO fix this, bookmark cafe that is not rated.
 import Dropdown from "../DropdownMenu/DropdownMenu";
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
-import {
-  notifyAddBookmark,
-  notifyError,
-  notifyRemoveBookmark,
-} from "../shared/Toasts";
-import axios from "axios";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import { useSession } from "next-auth/react";
 import LoggedOutModal from "../shared/logged-out-modal";
+import { useAddBookmark, useRemoveBookmark } from "../../hooks/useBoomark";
 
 export const FeaturedCafe = () => {
   const [inputValue, setInputValue] = useState<string | undefined>("");
   const [featuredCafe, setFeaturedCafe] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const validatedCafe =
+    featuredCafe && GooglePlacesAPIValidator.parse(featuredCafe);
+
+  const CafeDTO = {
+    latitude: validatedCafe?.geometry.location.lat() as number,
+    longitude: validatedCafe?.geometry.location.lng() as number,
+    name: validatedCafe?.name as string,
+    place_id: validatedCafe?.place_id as string,
+  };
+
+  const removeBookmark = useRemoveBookmark(CafeDTO);
+  const addBookmark = useAddBookmark(CafeDTO);
 
   const { data: session } = useSession();
-
-  const addBookmark = useMutation(
-    () => {
-      return axios.post("/api/bookmarkHandler?action=add", {
-        ...validatedCafe,
-        latitude: validatedCafe?.geometry.location.lat(),
-        longitude: validatedCafe?.geometry.location.lng(),
-      });
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyAddBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
-  const removeBookmark = useMutation(
-    () => {
-      return axios.post("/api/bookmarkHandler?action=remove", {
-        ...validatedCafe,
-        latitude: validatedCafe?.geometry.location.lat(),
-        longitude: validatedCafe?.geometry.location.lng(),
-      });
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyRemoveBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
 
   const handleDialog = () => {
     dialogOpen ? setDialogOpen(false) : setDialogOpen(true);
@@ -93,8 +53,6 @@ export const FeaturedCafe = () => {
       setInputValue(autocomplete.getPlace().name);
     });
   }
-  const validatedCafe =
-    featuredCafe && GooglePlacesAPIValidator.parse(featuredCafe);
 
   if (typeof window !== "undefined") {
     window.initService = initService;
