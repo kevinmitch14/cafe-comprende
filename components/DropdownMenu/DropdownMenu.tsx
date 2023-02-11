@@ -5,15 +5,10 @@ import {
   MapIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
-import axios from "axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Profile } from "../../hooks/useProfile";
 import { CafeProps } from "../Cafe/Cafe.types";
-import {
-  notifyAddBookmark,
-  notifyError,
-  notifyRemoveBookmark,
-} from "../shared/Toasts";
+import { useAddBookmark, useRemoveBookmark } from "../../hooks/useBoomark";
 
 // TODO implement Share Cafe + Get directions to cafe.
 const shareCafe = () => {
@@ -26,44 +21,8 @@ const getDirectionsToCafe = () => {
 
 const DropdownMenuDemo = ({ cafe }: { cafe: CafeProps }) => {
   // TODO optimistic updates
-  const addBookmark = useMutation(
-    () => {
-      return axios.post("/api/addBookmark", cafe);
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyAddBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
-  const removeBookmark = useMutation(
-    () => {
-      return axios.post("/api/removeBookmark", cafe);
-    },
-    {
-      onMutate: async () => {
-        await queryClient.cancelQueries(["profile"]);
-      },
-      onSuccess: () => {
-        notifyRemoveBookmark();
-      },
-      onError: (error: Error) => {
-        notifyError(error.message);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(["profile"]);
-      },
-    }
-  );
+  const addBookmark = useAddBookmark(cafe);
+  const removeBookmark = useRemoveBookmark(cafe);
 
   const queryClient = useQueryClient();
   const data = queryClient.getQueryData(["profile"]) as Profile;
