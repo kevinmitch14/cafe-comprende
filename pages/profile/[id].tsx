@@ -151,7 +151,7 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
     id: string;
   };
   // redirect to home if there is no session
-  if (!session) {
+  if (!session || session.user?.email !== id) {
     return {
       redirect: {
         destination: "/",
