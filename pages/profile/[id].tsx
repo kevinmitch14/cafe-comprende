@@ -122,6 +122,10 @@ export default function Profile(
 }
 
 export const getServerSideProps: GetServerSideProps<any> = async (context) => {
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=59'
+  )
   const session = await getServerSession(context.req, context.res, authOptions);
   const { id } = context.params as {
     id: string;
