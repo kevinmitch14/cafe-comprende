@@ -18,6 +18,7 @@ import Link from "next/link";
 import { notifySignedOut, notifyError } from "../../components/shared/Toasts";
 import { useRouter } from "next/router";
 import { useProfile } from "../../hooks/useProfile";
+import { MOCK_USER_DATA } from "../../utils/constants";
 
 export type Profile = {
   id: string;
@@ -43,8 +44,17 @@ export default function Profile(
     enabled: true
   });
   if (isLoading) return <p>Loading...</p>
-  if (isError) return <p>Error</p>
-  const { reviews, bookmarks } = profileData;
+  if (isError) return <p>Error {error.message}</p>
+
+  let reviews, bookmarks;
+  if (email === "jsmith@example.com") {
+    reviews = MOCK_USER_DATA.userAccount.reviews
+    bookmarks = MOCK_USER_DATA.userAccount.bookmarks
+  } else {
+  reviews = profileData.reviews
+  bookmarks = profileData.bookmarks
+  }
+
   const hasReviews = reviews.length > 0;
   const hasBookmarks = bookmarks.length > 0;
   return (
@@ -149,58 +159,8 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
       },
     };
   }
-
-  // if (id === "jsmith@example.com") {
-  //   return {
-  //     props: {
-  //       userAccount: {
-  //         reviews: [
-  //           {
-  //             id: 6,
-  //             email: "kevinmitch14@gmail.com",
-  //             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-  //             rating: 4,
-  //           },
-  //         ],
-  //         bookmarks: [
-  //           {
-  //             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-  //             latitude: "-41.31782359999999",
-  //             longitude: "-72.9820656",
-  //             name: "Cassis Cafe",
-  //             updatedAt: "2023-02-04T15:31:09.449Z",
-  //           },
-  //           {
-  //             place_id: "ChIJ98Er0TGRW0gReN0fnKQRzv0",
-  //             latitude: "53.2906203",
-  //             longitude: "-8.986531400000001",
-  //             name: "Grind Briarhill",
-  //             updatedAt: "2023-02-05T22:50:49.148Z",
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   };
-  // }
-  // const account = await prisma.user.findFirst({
-  //   where: {
-  //     email: {
-  //       equals: session.user?.email,
-  //     },
-  //   },
-  //   select: {
-  //     reviews: true,
-  //     bookmarks: {
-  //       select: {
-  //         place_id: true,
-  //         name: true,
-  //       },
-  //     },
-  //   },
-  // });
   return {
     props: {
-      // userAccount: account,
       userSession: session,
     },
   };
