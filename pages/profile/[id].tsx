@@ -1,6 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { CafeDTO, Review } from "../../components/Cafe/Cafe.types";
-import { prisma } from "../../utils/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import Image from "next/image";
@@ -17,6 +16,8 @@ import {
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { notifySignedOut, notifyError } from "../../components/shared/Toasts";
+import { useRouter } from "next/router";
+import { useProfile } from "../../hooks/useProfile";
 
 export type Profile = {
   id: string;
@@ -32,11 +33,20 @@ export type Bookmark = Omit<CafeDTO, "rating"> & { updatedAt: Date };
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  const { reviews, bookmarks } = props.userAccount;
+  const router = useRouter()
+  const {id:email} = router.query as {
+    id: string
+  }
+  const css = { maxWidth: "100%", height: "auto" };
+  const { data: profileData, isLoading, isError, error } = useProfile({
+    email: email,
+    enabled: true
+  });
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error</p>
+  const { reviews, bookmarks } = profileData;
   const hasReviews = reviews.length > 0;
   const hasBookmarks = bookmarks.length > 0;
-  const css = { maxWidth: "100%", height: "auto" };
-
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
@@ -140,57 +150,57 @@ export const getServerSideProps: GetServerSideProps<any> = async (context) => {
     };
   }
 
-  if (id === "jsmith@example.com") {
-    return {
-      props: {
-        userAccount: {
-          reviews: [
-            {
-              id: 6,
-              email: "kevinmitch14@gmail.com",
-              place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-              rating: 4,
-            },
-          ],
-          bookmarks: [
-            {
-              place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
-              latitude: "-41.31782359999999",
-              longitude: "-72.9820656",
-              name: "Cassis Cafe",
-              updatedAt: "2023-02-04T15:31:09.449Z",
-            },
-            {
-              place_id: "ChIJ98Er0TGRW0gReN0fnKQRzv0",
-              latitude: "53.2906203",
-              longitude: "-8.986531400000001",
-              name: "Grind Briarhill",
-              updatedAt: "2023-02-05T22:50:49.148Z",
-            },
-          ],
-        },
-      },
-    };
-  }
-  const account = await prisma.user.findFirst({
-    where: {
-      email: {
-        equals: session.user?.email,
-      },
-    },
-    select: {
-      reviews: true,
-      bookmarks: {
-        select: {
-          place_id: true,
-          name: true,
-        },
-      },
-    },
-  });
+  // if (id === "jsmith@example.com") {
+  //   return {
+  //     props: {
+  //       userAccount: {
+  //         reviews: [
+  //           {
+  //             id: 6,
+  //             email: "kevinmitch14@gmail.com",
+  //             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
+  //             rating: 4,
+  //           },
+  //         ],
+  //         bookmarks: [
+  //           {
+  //             place_id: "ChIJ-7S4cNcmGJYR5Unb2U_q6XU",
+  //             latitude: "-41.31782359999999",
+  //             longitude: "-72.9820656",
+  //             name: "Cassis Cafe",
+  //             updatedAt: "2023-02-04T15:31:09.449Z",
+  //           },
+  //           {
+  //             place_id: "ChIJ98Er0TGRW0gReN0fnKQRzv0",
+  //             latitude: "53.2906203",
+  //             longitude: "-8.986531400000001",
+  //             name: "Grind Briarhill",
+  //             updatedAt: "2023-02-05T22:50:49.148Z",
+  //           },
+  //         ],
+  //       },
+  //     },
+  //   };
+  // }
+  // const account = await prisma.user.findFirst({
+  //   where: {
+  //     email: {
+  //       equals: session.user?.email,
+  //     },
+  //   },
+  //   select: {
+  //     reviews: true,
+  //     bookmarks: {
+  //       select: {
+  //         place_id: true,
+  //         name: true,
+  //       },
+  //     },
+  //   },
+  // });
   return {
     props: {
-      userAccount: account,
+      // userAccount: account,
       userSession: session,
     },
   };
